@@ -230,6 +230,10 @@ a {
 }
 
 /* Service */
+.service {
+    background-color: #ff4444;
+}
+
 .service .icon {
     display: grid;
     align-content: center;
@@ -372,7 +376,7 @@ a {
 
 .dark-theme .service,
 .dark-theme .border-hover {
-    background-color: #2a2a2a;
+    background-color: #ff4444;
     border-color: #3a3a3a;
 }
 
@@ -856,7 +860,7 @@ a {
 .dark-theme #work .border-hover,
 .dark-theme #Models .border-hover,
 .dark-theme #services .service {
-    background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+    background-color: #ff4444;
 }
 
 .dark-theme #services .service p {
