@@ -90,6 +90,24 @@ function updateAthensTime(){
     if(timeEl) timeEl.textContent = now;
 }
 setInterval(updateAthensTime,1000);
+
+// Map Open-Meteo weather codes to icon URLs (using minimal set)
+function getWeatherIcon(code){
+    const map={
+        0:'https://cdn.jsdelivr.net/gh/erikflowers/weather-icons/svg/wi-day-sunny.svg',
+        1:'https://cdn.jsdelivr.net/gh/erikflowers/weather-icons/svg/wi-day-sunny.svg',
+        2:'https://cdn.jsdelivr.net/gh/erikflowers/weather-icons/svg/wi-day-cloudy.svg',
+        3:'https://cdn.jsdelivr.net/gh/erikflowers/weather-icons/svg/wi-cloudy.svg',
+        45:'https://cdn.jsdelivr.net/gh/erikflowers/weather-icons/svg/wi-fog.svg',
+        48:'https://cdn.jsdelivr.net/gh/erikflowers/weather-icons/svg/wi-fog.svg',
+        51:'https://cdn.jsdelivr.net/gh/erikflowers/weather-icons/svg/wi-sprinkle.svg',
+        61:'https://cdn.jsdelivr.net/gh/erikflowers/weather-icons/svg/wi-rain.svg',
+        71:'https://cdn.jsdelivr.net/gh/erikflowers/weather-icons/svg/wi-snow.svg',
+        80:'https://cdn.jsdelivr.net/gh/erikflowers/weather-icons/svg/wi-showers.svg',
+        95:'https://cdn.jsdelivr.net/gh/erikflowers/weather-icons/svg/wi-thunderstorm.svg'
+    };
+    return map[code]||'';
+}
 updateAthensTime();
 
 // Fetch visitor IP
@@ -98,22 +116,43 @@ fetch('https://api.ipify.org?format=json')
   .then(data=>{
       const ipEl = document.getElementById('visitor-ip');
       if(ipEl) ipEl.textContent = data.ip;
+      // fetch flag using ipapi
+      fetch(`https://ipapi.co/${data.ip}/json/`).then(r=>r.json()).then(info=>{
+          const flagEl=document.getElementById('ip-flag');
+          if(flagEl && info.country_code){
+              flagEl.src=`https://flagcdn.com/48x36/${info.country_code.toLowerCase()}.png`;
+              flagEl.style.display='inline-block';
+          // fetch weather now that we have location
+          if(info.latitude && info.longitude){
+              const lat=info.latitude, lon=info.longitude;
+              fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`)
+                .then(r=>r.json()).then(w=>{
+                    const weatherEl=document.getElementById('visitor-weather');
+                    const iconEl=document.getElementById('weather-icon');
+                    if(weatherEl && w.current_weather){
+                        const temp=w.current_weather.temperature;
+                        const code=w.current_weather.weathercode; // numeric
+                        weatherEl.textContent=`${temp}°C`;
+                        const cityEl=document.getElementById('visitor-city');
+                        if(cityEl && info.city){cityEl.textContent=info.city;}
+                        // simple icon mapping using open-meteo description
+                        const iconUrl=getWeatherIcon(code);
+                        if(iconEl && iconUrl){
+                            iconEl.src=iconUrl;
+                            iconEl.style.display='inline-block';
+                        }
+                    }
+                }).catch(()=>{
+                    const weatherEl=document.getElementById('visitor-weather');
+                    if(weatherEl) weatherEl.textContent='Unavailable';
+                });
+          }
+          }
+      });
   }).catch(()=>{
       const ipEl = document.getElementById('visitor-ip');
       if(ipEl) ipEl.textContent = 'Unavailable';
   });
 
-// Fetch Athens weather via Open-Meteo
-fetch('https://api.open-meteo.com/v1/forecast?latitude=37.98&longitude=23.73&current_weather=true&timezone=Europe%2FAthens')
-  .then(res=>res.json())
-  .then(data=>{
-      const weatherEl = document.getElementById('athens-weather');
-      if(weatherEl && data.current_weather){
-          const t = data.current_weather.temperature;
-          const ws = data.current_weather.windspeed;
-          weatherEl.textContent = `${t}°C | Wind ${ws}km/h`;
-      }
-  }).catch(()=>{
-      const weatherEl = document.getElementById('athens-weather');
-      if(weatherEl) weatherEl.textContent = 'Unavailable';
-  });
+// Fetch visitor weather via Open-Meteo based on geolocation
+// Weather will be fetched after ipapi provides lat/lon
