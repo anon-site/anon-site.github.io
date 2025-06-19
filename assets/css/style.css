@@ -845,6 +845,14 @@ a {
     transform: translateX(10px);
 }
 
+/* Uniform image sizing inside Design Web cards */
+#Models .border-hover img {
+    width: 100%;
+    height: 220px; /* consistent height */
+    object-fit: cover;
+}
+
+
 #work .border-hover:hover,
 #Models .border-hover:hover,
 #services .service:hover {
@@ -856,18 +864,19 @@ a {
 .dark-theme #work .border-hover,
 .dark-theme #Models .border-hover,
 .dark-theme #services .service {
-    background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+    background-color: #2a2a2a; /* unified dark card background */
+    border: none;                /* remove outline */
+    box-shadow: none;            /* remove outer glow */
 }
 
 .dark-theme #services .service p {
-    color: #000000;
+    color: #cccccc; /* light text for readability in dark mode */
 }
 
 /* Dark Mode Enhancements */
 .dark-theme #work .border-hover:hover {
     transform: translateY(-10px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2),
-                0 0 0 3px var(--bs-info);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); /* subtle depth without glow */
 }
 
 .dark-theme #work .border-hover::after {
@@ -887,6 +896,51 @@ a {
     transform: scaleX(1);
     transform-origin: left;
 }
+
+/* Ensure all section backgrounds adopt dark color */
+.dark-theme .section-padding {
+    background-color: #1e1e1e;
+}
+
+/* Remove default borders for all elements with .border-hover in dark theme */
+.dark-theme .border-hover,
+.dark-theme .border-hover:hover {
+    border: none !important;
+    box-shadow: none !important; /* remove any glow */
+}
+
+.dark-theme .border-hover::after {
+    display: none !important; /* disable decorative after pseudo-element */
+}
+
+/* Icon style adjustment for dark theme to remove white inner border */
+
+/* Live Info styles */
+.dark-theme #live-info .service {
+    background-color: #2a2a2a;
+    border: none;
+    box-shadow: none;
+}
+.dark-theme #live-info .service h5 {
+    color: var(--bs-info);
+}
+.dark-theme #live-info .service p {
+    color: #cccccc;
+}
+
+/* Icon style adjustment for dark theme to remove white inner border */
+.dark-theme .service .icon {
+    box-shadow: inset 2px 2px 6px rgba(0,0,0,0.5), inset -2px -2px 4px rgba(255,255,255,0.05); /* subtle depth, no white rim */
+    border: none;
+}
+
+/* Text colors inside dark cards */
+.dark-theme #work .border-hover h5,
+.dark-theme #Models .border-hover h5,
+.dark-theme #services .service h5 {
+    color: #ffffff;
+}
+
 
 
 

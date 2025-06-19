@@ -82,3 +82,38 @@ document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
         }
     });
 });
+
+// ---------------- Live Info Section ----------------
+function updateAthensTime(){
+    const now = new Date().toLocaleTimeString('en-GB',{timeZone:'Europe/Athens'});
+    const timeEl = document.getElementById('athens-time');
+    if(timeEl) timeEl.textContent = now;
+}
+setInterval(updateAthensTime,1000);
+updateAthensTime();
+
+// Fetch visitor IP
+fetch('https://api.ipify.org?format=json')
+  .then(res=>res.json())
+  .then(data=>{
+      const ipEl = document.getElementById('visitor-ip');
+      if(ipEl) ipEl.textContent = data.ip;
+  }).catch(()=>{
+      const ipEl = document.getElementById('visitor-ip');
+      if(ipEl) ipEl.textContent = 'Unavailable';
+  });
+
+// Fetch Athens weather via Open-Meteo
+fetch('https://api.open-meteo.com/v1/forecast?latitude=37.98&longitude=23.73&current_weather=true&timezone=Europe%2FAthens')
+  .then(res=>res.json())
+  .then(data=>{
+      const weatherEl = document.getElementById('athens-weather');
+      if(weatherEl && data.current_weather){
+          const t = data.current_weather.temperature;
+          const ws = data.current_weather.windspeed;
+          weatherEl.textContent = `${t}°C | Wind ${ws}km/h`;
+      }
+  }).catch(()=>{
+      const weatherEl = document.getElementById('athens-weather');
+      if(weatherEl) weatherEl.textContent = 'Unavailable';
+  });
