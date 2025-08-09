@@ -84,12 +84,23 @@ document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
 });
 
 // ---------------- Live Info Section ----------------
-function updateAthensTime(){
-    const now = new Date().toLocaleTimeString('en-GB',{timeZone:'Europe/Athens'});
-    const timeEl = document.getElementById('athens-time');
+let userTimezone = 'Europe/Athens'; // Default timezone
+let userCity = 'Athens'; // Default city
+
+function updateLocalTime(){
+    const now = new Date().toLocaleTimeString('en-GB',{timeZone: userTimezone});
+    const timeEl = document.getElementById('local-time');
     if(timeEl) timeEl.textContent = now;
 }
-setInterval(updateAthensTime,1000);
+
+function updateTimezoneAndCity(timezone, city) {
+    userTimezone = timezone;
+    userCity = city;
+    const cityEl = document.getElementById('local-city');
+    if(cityEl) cityEl.textContent = city;
+}
+
+setInterval(updateLocalTime,1000);
 
 // Map Open-Meteo weather codes to icon URLs (using minimal set)
 function getWeatherIcon(code){
@@ -108,7 +119,7 @@ function getWeatherIcon(code){
     };
     return map[code]||'';
 }
-updateAthensTime();
+updateLocalTime();
 
 // Fetch visitor IP
 fetch('https://api.ipify.org?format=json')
@@ -122,6 +133,13 @@ fetch('https://api.ipify.org?format=json')
           if(flagEl && info.country_code){
               flagEl.src=`https://flagcdn.com/48x36/${info.country_code.toLowerCase()}.png`;
               flagEl.style.display='inline-block';
+          }
+          
+          // Update timezone and city for local time display
+          if(info.timezone && info.city) {
+              updateTimezoneAndCity(info.timezone, info.city);
+          }
+          
           // fetch weather now that we have location
           if(info.latitude && info.longitude){
               const lat=info.latitude, lon=info.longitude;
@@ -146,7 +164,6 @@ fetch('https://api.ipify.org?format=json')
                     const weatherEl=document.getElementById('visitor-weather');
                     if(weatherEl) weatherEl.textContent='Unavailable';
                 });
-          }
           }
       });
   }).catch(()=>{
