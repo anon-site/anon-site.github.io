@@ -84,23 +84,6 @@ document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
 });
 
 // ---------------- Live Info Section ----------------
-let userTimezone = 'Europe/Athens'; // Default timezone
-let userCity = 'Athens'; // Default city
-
-function updateLocalTime(){
-    const now = new Date().toLocaleTimeString('en-GB',{timeZone: userTimezone});
-    const timeEl = document.getElementById('local-time');
-    if(timeEl) timeEl.textContent = now;
-}
-
-function updateTimezoneAndCity(timezone, city) {
-    userTimezone = timezone;
-    userCity = city;
-    const cityEl = document.getElementById('local-city');
-    if(cityEl) cityEl.textContent = city;
-}
-
-setInterval(updateLocalTime,1000);
 
 // Map Open-Meteo weather codes to icon URLs (using minimal set)
 function getWeatherIcon(code){
@@ -119,7 +102,6 @@ function getWeatherIcon(code){
     };
     return map[code]||'';
 }
-updateLocalTime();
 
 // Fetch visitor IP
 fetch('https://api.ipify.org?format=json')
@@ -135,10 +117,6 @@ fetch('https://api.ipify.org?format=json')
               flagEl.style.display='inline-block';
           }
           
-          // Update timezone and city for local time display
-          if(info.timezone && info.city) {
-              updateTimezoneAndCity(info.timezone, info.city);
-          }
           
           // fetch weather now that we have location
           if(info.latitude && info.longitude){
@@ -170,6 +148,5 @@ fetch('https://api.ipify.org?format=json')
       const ipEl = document.getElementById('visitor-ip');
       if(ipEl) ipEl.textContent = 'Unavailable';
   });
-
 // Fetch visitor weather via Open-Meteo based on geolocation
 // Weather will be fetched after ipapi provides lat/lon
