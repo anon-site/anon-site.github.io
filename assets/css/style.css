@@ -1,10 +1,8 @@
-/* Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap');
+/* Fonts - Loaded via preload in HTML for better performance */
 
 body {
     font-family: "Bai Jamjuree", sans-serif;
     line-height: 1.7;
-    
 }
 
 .section-padding {
