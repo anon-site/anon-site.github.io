@@ -30,29 +30,33 @@ TxtType.prototype.tick = function() {
     var fullTxt = this.toRotate[i];
 
     if (this.isDeleting) {
-    this.txt = fullTxt.substring(0, this.txt.length - 1);
+        this.txt = fullTxt.substring(0, this.txt.length - 1);
     } else {
-    this.txt = fullTxt.substring(0, this.txt.length + 1);
+        this.txt = fullTxt.substring(0, this.txt.length + 1);
     }
 
     this.el.innerHTML = '<span class="wrap">'+this.txt+'</span>';
 
     var that = this;
-    var delta = 200 - Math.random() * 100;
+    // تحسين السرعة لتصبح أكثر سلاسة
+    var delta = 80; // سرعة ثابتة للكتابة
+    var deleteDelta = 50; // سرعة ثابتة للمسح
 
-    if (this.isDeleting) { delta /= 2; }
+    if (this.isDeleting) { 
+        delta = deleteDelta; 
+    }
 
     if (!this.isDeleting && this.txt === fullTxt) {
-    delta = this.period;
-    this.isDeleting = true;
+        delta = this.period;
+        this.isDeleting = true;
     } else if (this.isDeleting && this.txt === '') {
-    this.isDeleting = false;
-    this.loopNum++;
-    delta = 500;
+        this.isDeleting = false;
+        this.loopNum++;
+        delta = 300; // وقت أقصر بين النصوص
     }
 
     setTimeout(function() {
-    that.tick();
+        that.tick();
     }, delta);
 };
 
@@ -68,8 +72,36 @@ window.onload = function() {
     // INJECT CSS
     var css = document.createElement("style");
     css.type = "text/css";
-    css.innerHTML = ".typewrite > .wrap { border-right: 0.08em solid #fff}";
+    css.innerHTML = `
+        .typewrite > .wrap { 
+            border-right: 0.08em solid #0dcaf0;
+            animation: blink 1s infinite;
+            padding-right: 2px;
+        }
+        @keyframes blink {
+            0%, 50% { border-color: #0dcaf0; }
+            51%, 100% { border-color: transparent; }
+        }
+        .dark-theme .typewrite > .wrap {
+            border-right-color: #0dcaf0;
+        }
+    `;
     document.body.appendChild(css);
+    
+    // إضافة تأثيرات للأزرار عند التحميل
+    setTimeout(function() {
+        const heroButtons = document.querySelectorAll('#hero .btn');
+        heroButtons.forEach((btn, index) => {
+            btn.style.opacity = '0';
+            btn.style.transform = index === 0 ? 'translateX(100px)' : 'translateX(-100px)';
+            
+            setTimeout(function() {
+                btn.style.transition = 'all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                btn.style.opacity = '1';
+                btn.style.transform = 'translateX(0)';
+            }, 500 + (index * 200));
+        });
+    }, 100);
 };
 
 // Close mobile menu after clicking a link
