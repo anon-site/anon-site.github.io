@@ -67,6 +67,8 @@
     <title>ANON DESIGN</title>
     <link rel="icon" href="./assets/images/hero.png" type="image/png">
     <link rel="apple-touch-icon" href="./assets/images/hero.png">
+    <!-- Preload critical resources for faster loading -->
+    <link rel="preload" href="./assets/images/hero.png" as="image">
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap"></noscript>
     <link rel="stylesheet" href="./assets/css/bootstrap.css">
@@ -272,7 +274,7 @@
         <div class="container">
             <div class="row gy-4 align-items-center">
                 <div class="col-lg-5">
-                    <img data-aos="fade-down" data-aos-delay="200" src="./assets/images/hero.png" class="img-fluid" alt="" loading="lazy">
+                    <img data-aos="fade-down" data-aos-delay="200" src="./assets/images/hero.png" class="img-fluid" alt="Younis Adel Al-Obeed - Professional Web Developer" loading="eager" width="400" height="400">
                 </div>
                 <div class="col-lg-6">
                     <h1>
@@ -281,6 +283,7 @@
                         </a>
                       </h1>
                     <p data-aos="fade-up" data-aos-delay="200" style="font-size: 1.5rem;">Younis Adel Al-Obeed</p>
+                    <p data-aos="fade-up" data-aos-delay="250" class="hero-subtitle">Professional Web Developer & Designer | 15+ Years Experience | Athens, Greece</p>
                     <a data-aos="fade-up" data-aos-delay="300" href="#services" class="btn btn-outline-info me-3"><span>Lets Start</span></a>
 					<a data-aos="fade-up" data-aos-delay="400" href="https://anon-site.github.io/cv/" class="btn btn-outline-info"><span>My CV</span></a>
                 </div>
@@ -295,7 +298,7 @@
                 <div class="col-12" data-aos="fade-up">
                     <div class="intro-section text-center mb-5">
                         <h1 class="fw-bold">My Services</h1>
-                        <p class="mx-auto">I provide comprehensive design and development services including web design, business cards, logos, and commercial advertisements.</p>
+                        <p class="mx-auto">Professional web design and development services in Athens, Greece. Specializing in responsive websites, custom logos, business cards, and print design. Expert in HTML5, CSS3, JavaScript, PHP, and WordPress development.</p>
                     </div>
                 </div>
             </div>
@@ -413,42 +416,42 @@
         <div class="row gy-4">
             <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
                 <div class="p-4 border-hover shadow rounded-5">
-                    <img src="./assets/images/project-01.jpg" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
+                    <img src="./assets/images/project-01.png" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
                     <span class="badge bg-info">Photoshop</span>
                     <a href="#" class="d-block mt-2"><h5 class="fw-bold">business card</h5></a>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
                 <div class="p-4 border-hover shadow rounded-5">
-                    <img src="./assets/images/project-02.jpg" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
+                    <img src="./assets/images/project-02.png" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
                     <span class="badge bg-info">Photoshop</span>
                     <a href="#" class="d-block mt-2"><h5 class="fw-bold">business card</h5></a>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
                 <div class="p-4 border-hover shadow rounded-5">
-                    <img src="./assets/images/project-03.jpg" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
+                    <img src="./assets/images/project-03.png" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
                     <span class="badge bg-info">Photoshop</span>
                     <a href="#" class="d-block mt-2"><h5 class="fw-bold">business card</h5></a>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
                 <div class="p-4 border-hover shadow rounded-5">
-                    <img src="./assets/images/project-04.jpg" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
+                    <img src="./assets/images/project-04.png" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
                     <span class="badge bg-info">Photoshop</span>
                     <a href="#" class="d-block mt-2"><h5 class="fw-bold">business card</h5></a>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
                 <div class="p-4 border-hover shadow rounded-5">
-                    <img src="./assets/images/project-05.jpg" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
+                    <img src="./assets/images/project-05.png" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
                     <span class="badge bg-info">Photoshop</span>
                     <a href="#" class="d-block mt-2"><h5 class="fw-bold">Menu card</h5></a>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
                 <div class="p-4 border-hover shadow rounded-5">
-                    <img src="./assets/images/project-06.jpg" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
+                    <img src="./assets/images/project-06.png" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
                     <span class="badge bg-info">Corel Draw</span>
                     <a href="#" class="d-block mt-2"><h5 class="fw-bold">Restaurant menu</h5></a>
                 </div>
@@ -471,14 +474,14 @@
         <div class="row gy-4">
             <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
                 <div class="p-4 border-hover shadow rounded-5">
-                    <img src="./assets/images/w1.jpg" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
+                    <img src="./assets/images/w1.png" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
                     <span class="badge bg-info">Animation</span>
                     <a href="https://anon-site.github.io/animation/" class="d-block mt-2"><h5 class="fw-bold">Animation</h5></a>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
                 <div class="p-4 border-hover shadow rounded-5">
-                    <img src="./assets/images/n1.jpg" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
+                    <img src="./assets/images/n1.png" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
                     <span class="badge bg-info">Wordpress</span>
                     <a href="https://anon-site.github.io/greece/" class="d-block mt-2"><h5 class="fw-bold">الحياة داخل اليونان</h5></a>
                 </div>
@@ -492,21 +495,21 @@
             </div>
             <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
                 <div class="p-4 border-hover shadow rounded-5">
-                    <img src="./assets/images/yemen.jpg" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
+                    <img src="./assets/images/yemen.png" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
                     <span class="badge bg-info">Animation</span>
                     <a href="https://anon-site.github.io/greece/" class="d-block mt-2"><h5 class="fw-bold">الحياة داخل اليونان</h5></a>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
                 <div class="p-4 border-hover shadow rounded-5">
-                    <img src="./assets/images/q1.jpg" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
+                    <img src="./assets/images/q1.png" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
                     <span class="badge bg-info">Animation</span>
                     <a href="https://anon-site.github.io/noon.tv" class="d-block mt-2"><h5 class="fw-bold">TV Player</h5></a>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
                 <div class="p-4 border-hover shadow rounded-5">
-                    <img src="./assets/images/t1.jpg" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
+                    <img src="./assets/images/t1.png" class="img-fluid rounded-5 mb-3" alt="" loading="lazy">
                     <span class="badge bg-info">Animation</span>
                     <a href="https://anon-site.github.io/data-table/" class="d-block mt-2"><h5 class="fw-bold">Data list</h5></a>
                 </div>
@@ -681,18 +684,28 @@
         localStorage.setItem('theme', currentTheme);
     });
 
-    // Back to Top Button
+    // Back to Top Button - Optimized
     const backToTopButton = document.getElementById('backToTop');
+    let scrollTicking = false;
     
-    window.addEventListener('scroll', () => {
+    function updateBackToTopButton() {
         if (window.pageYOffset > 300) {
             backToTopButton.classList.add('show');
         } else {
             backToTopButton.classList.remove('show');
         }
+        scrollTicking = false;
+    }
+    
+    window.addEventListener('scroll', () => {
+        if (!scrollTicking) {
+            requestAnimationFrame(updateBackToTopButton);
+            scrollTicking = true;
+        }
     });
 
     backToTopButton.addEventListener('click', () => {
+        // Enhanced smooth scrolling
         window.scrollTo({
             top: 0,
             behavior: 'smooth'

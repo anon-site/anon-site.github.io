@@ -5,6 +5,18 @@ body {
     line-height: 1.7;
 }
 
+/* Hero subtitle styling */
+.hero-subtitle {
+    font-size: 1rem;
+    color: #6c757d;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+}
+
+.dark-theme .hero-subtitle {
+    color: #adb5bd;
+}
+
 .section-padding {
     padding-top: 120px;
     padding-bottom: 120px;
@@ -1606,6 +1618,16 @@ footer::before {
 /* Smooth Scroll Enhancement */
 html {
     scroll-behavior: smooth;
+}
+
+/* Performance optimization for smooth scrolling */
+* {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    perspective: 1000;
 }
 
 /* Custom Scrollbar */
