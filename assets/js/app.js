@@ -176,11 +176,30 @@ fetch('https://api.ipify.org?format=json')
 // ===== SIMPLE SLIDESHOW FUNCTIONALITY =====
 
 let currentSlideIndex = 0;
+let currentWebSlideIndex = 0;
 let slideshowInterval;
+let webSlideshowInterval;
+
+// Animation types for slideshow
+const animationTypes = [
+    'slide-slide-left',
+    'slide-slide-right', 
+    'slide-slide-up',
+    'slide-slide-down',
+    'slide-scale',
+    'slide-rotate',
+    'slide-flip',
+    'slide-zoom',
+    'slide-fade'
+];
+
+let currentAnimationType = 0;
+let currentWebAnimationType = 0;
 
 // Initialize slideshow when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     initializeSlideshow();
+    initializeWebSlideshow();
 });
 
 // Reinitialize slideshow on window resize
@@ -286,14 +305,24 @@ function showSlide(index) {
     if (index >= slides.length) index = 0;
     if (index < 0) index = slides.length - 1;
     
-    // Hide all slides
-    slides.forEach(slide => slide.classList.remove('active'));
+    // Remove all animation classes and active class
+    slides.forEach(slide => {
+        slide.classList.remove('active');
+        animationTypes.forEach(type => slide.classList.remove(type));
+    });
     dots.forEach(dot => dot.classList.remove('active'));
     
-    // Show current slide
+    // Show current slide with animation
     currentSlideIndex = index;
-    slides[currentSlideIndex].classList.add('active');
+    const currentSlide = slides[currentSlideIndex];
+    const animationType = animationTypes[currentAnimationType];
+    
+    currentSlide.classList.add(animationType);
+    currentSlide.classList.add('active');
     dots[currentSlideIndex].classList.add('active');
+    
+    // Change animation type for next slide
+    currentAnimationType = (currentAnimationType + 1) % animationTypes.length;
 }
 
 function changeSlide(direction) {
@@ -344,6 +373,528 @@ function pauseAutoPlay() {
     }
 }
 
+// ===== DESIGN WEB SLIDESHOW FUNCTIONALITY =====
+
+function initializeWebSlideshow() {
+    const slideshowContainer = document.querySelector('.web-slideshow');
+    if (!slideshowContainer) return;
+    
+    // Check if mobile device
+    const isMobile = window.innerWidth <= 768;
+    
+    if (isMobile) {
+        // Create individual slides for each card on mobile
+        createWebMobileSlides(slideshowContainer);
+    }
+    
+    const slides = slideshowContainer.querySelectorAll('.slide');
+    if (slides.length === 0) return;
+    
+    // Set initial state
+    showWebSlide(0);
+    
+    // Start auto-play after 2 seconds
+    setTimeout(() => {
+        startWebAutoPlay();
+    }, 2000);
+    
+    // Pause auto-play when user hovers over slideshow
+    slideshowContainer.addEventListener('mouseenter', pauseWebAutoPlay);
+    slideshowContainer.addEventListener('mouseleave', startWebAutoPlay);
+}
+
+function createWebMobileSlides(container) {
+    // Get all cards from existing slides
+    const allCards = container.querySelectorAll('.border-hover');
+    
+    if (allCards.length === 0) return;
+    
+    // Clear existing slides
+    const existingSlides = container.querySelectorAll('.slide');
+    existingSlides.forEach(slide => slide.remove());
+    
+    // Create new slides - one for each card
+    allCards.forEach((card, index) => {
+        const slide = document.createElement('div');
+        slide.className = 'slide';
+        if (index === 0) slide.classList.add('active');
+        
+        const row = document.createElement('div');
+        row.className = 'row gy-4 justify-content-center';
+        
+        const col = document.createElement('div');
+        col.className = 'col-12';
+        
+        // Clone the card
+        const clonedCard = card.cloneNode(true);
+        col.appendChild(clonedCard);
+        row.appendChild(col);
+        slide.appendChild(row);
+        
+        container.insertBefore(slide, container.querySelector('.slideshow-nav'));
+    });
+    
+    // Update dots
+    updateWebMobileDots(container, allCards.length);
+}
+
+function updateWebMobileDots(container, totalSlides) {
+    const dotsContainer = container.querySelector('.slideshow-dots');
+    if (!dotsContainer) return;
+    
+    // Clear existing dots
+    dotsContainer.innerHTML = '';
+    
+    // Create new dots
+    for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('span');
+        dot.className = 'dot';
+        if (i === 0) dot.classList.add('active');
+        dot.onclick = () => currentWebSlide(i + 1);
+        dotsContainer.appendChild(dot);
+    }
+}
+
+function showWebSlide(index) {
+    const slideshowContainer = document.querySelector('.web-slideshow');
+    if (!slideshowContainer) return;
+    
+    const slides = slideshowContainer.querySelectorAll('.slide');
+    const dots = slideshowContainer.querySelectorAll('.dot');
+    
+    if (index >= slides.length) index = 0;
+    if (index < 0) index = slides.length - 1;
+    
+    // Remove all animation classes and active class
+    slides.forEach(slide => {
+        slide.classList.remove('active');
+        animationTypes.forEach(type => slide.classList.remove(type));
+    });
+    dots.forEach(dot => dot.classList.remove('active'));
+    
+    // Show current slide with animation
+    currentWebSlideIndex = index;
+    const currentSlide = slides[currentWebSlideIndex];
+    const animationType = animationTypes[currentWebAnimationType];
+    
+    currentSlide.classList.add(animationType);
+    currentSlide.classList.add('active');
+    dots[currentWebSlideIndex].classList.add('active');
+    
+    // Change animation type for next slide
+    currentWebAnimationType = (currentWebAnimationType + 1) % animationTypes.length;
+}
+
+function changeWebSlide(direction) {
+    const slideshowContainer = document.querySelector('.web-slideshow');
+    if (!slideshowContainer) return;
+    
+    const slides = slideshowContainer.querySelectorAll('.slide');
+    let newIndex = currentWebSlideIndex + direction;
+    
+    if (newIndex >= slides.length) newIndex = 0;
+    if (newIndex < 0) newIndex = slides.length - 1;
+    
+    showWebSlide(newIndex);
+    
+    // Reset auto-play timer
+    pauseWebAutoPlay();
+    setTimeout(startWebAutoPlay, 4000);
+}
+
+function currentWebSlide(index) {
+    showWebSlide(index - 1);
+    
+    // Reset auto-play timer
+    pauseWebAutoPlay();
+    setTimeout(startWebAutoPlay, 4000);
+}
+
+function startWebAutoPlay() {
+    pauseWebAutoPlay(); // Clear any existing interval
+    
+    webSlideshowInterval = setInterval(() => {
+        const slideshowContainer = document.querySelector('.web-slideshow');
+        if (!slideshowContainer) return;
+        
+        const slides = slideshowContainer.querySelectorAll('.slide');
+        let nextIndex = currentWebSlideIndex + 1;
+        
+        if (nextIndex >= slides.length) nextIndex = 0;
+        
+        showWebSlide(nextIndex);
+    }, 4000); // Change slide every 4 seconds
+}
+
+function pauseWebAutoPlay() {
+    if (webSlideshowInterval) {
+        clearInterval(webSlideshowInterval);
+        webSlideshowInterval = null;
+    }
+}
+
+// ===== ANIMATION CONTROL FUNCTIONS =====
+
+function changeAnimationType() {
+    currentAnimationType = (currentAnimationType + 1) % animationTypes.length;
+    
+    // Show notification
+    showAnimationNotification(animationTypes[currentAnimationType]);
+    
+    // Apply new animation to current slide
+    const slideshowContainer = document.querySelector('.slideshow-container');
+    if (slideshowContainer) {
+        const currentSlide = slideshowContainer.querySelector('.slide.active');
+        if (currentSlide) {
+            // Remove old animation class
+            animationTypes.forEach(type => currentSlide.classList.remove(type));
+            // Add new animation class
+            currentSlide.classList.add(animationTypes[currentAnimationType]);
+        }
+    }
+}
+
+function changeWebAnimationType() {
+    currentWebAnimationType = (currentWebAnimationType + 1) % animationTypes.length;
+    
+    // Show notification
+    showAnimationNotification(animationTypes[currentWebAnimationType]);
+    
+    // Apply new animation to current slide
+    const slideshowContainer = document.querySelector('.web-slideshow');
+    if (slideshowContainer) {
+        const currentSlide = slideshowContainer.querySelector('.slide.active');
+        if (currentSlide) {
+            // Remove old animation class
+            animationTypes.forEach(type => currentSlide.classList.remove(type));
+            // Add new animation class
+            currentSlide.classList.add(animationTypes[currentWebAnimationType]);
+        }
+    }
+}
+
+function showAnimationNotification(animationType) {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = 'animation-notification';
+    notification.innerHTML = `
+        <div class="notification-content">
+            <i class="ri-magic-line"></i>
+            <span>نوع الحركة: ${getAnimationName(animationType)}</span>
+        </div>
+    `;
+    
+    // Add styles
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(13, 202, 240, 0.9);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 25px;
+        font-size: 14px;
+        font-weight: 600;
+        z-index: 10000;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 8px 25px rgba(13, 202, 240, 0.4);
+        animation: slideDownIn 0.5s ease;
+    `;
+    
+    // Add to page
+    document.body.appendChild(notification);
+    
+    // Remove after 2 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideUpOut 0.5s ease forwards';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 500);
+    }, 2000);
+}
+
+function getAnimationName(animationType) {
+    const names = {
+        'slide-slide-left': 'انزلاق من اليمين',
+        'slide-slide-right': 'انزلاق من اليسار',
+        'slide-slide-up': 'انزلاق من الأسفل',
+        'slide-slide-down': 'انزلاق من الأعلى',
+        'slide-scale': 'تكبير',
+        'slide-rotate': 'دوران',
+        'slide-flip': 'قلب',
+        'slide-zoom': 'زوم ثلاثي الأبعاد',
+        'slide-fade': 'تلاشي'
+    };
+    return names[animationType] || 'حركة افتراضية';
+}
+
+// Add CSS for notification animations
+const notificationStyles = document.createElement('style');
+notificationStyles.textContent = `
+    @keyframes slideDownIn {
+        0% {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    }
+    
+    @keyframes slideUpOut {
+        0% {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        100% {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20px);
+        }
+    }
+    
+    .notification-content {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .notification-content i {
+        font-size: 16px;
+    }
+`;
+document.head.appendChild(notificationStyles);
+
+// ===== GALLERY FUNCTIONALITY =====
+
+// Gallery data
+const galleryData = {
+    'design-print': {
+        title: 'معرض تصميمات الطباعة',
+        items: [
+            {
+                image: './assets/images/project-01.webp',
+                title: 'Business Card',
+                badge: 'Photoshop',
+                badgeClass: 'bg-info',
+                description: 'تصميم بطاقة عمل احترافية بألوان جذابة وتخطيط متقن'
+            },
+            {
+                image: './assets/images/project-02.webp',
+                title: 'Business Card',
+                badge: 'Photoshop',
+                badgeClass: 'bg-info',
+                description: 'تصميم بطاقة عمل أنيقة مع تأثيرات بصرية مميزة'
+            },
+            {
+                image: './assets/images/project-03.webp',
+                title: 'Business Card',
+                badge: 'Photoshop',
+                badgeClass: 'bg-info',
+                description: 'تصميم بطاقة عمل عصرية بأسلوب مينيمالي أنيق'
+            },
+            {
+                image: './assets/images/project-04.webp',
+                title: 'Business Card',
+                badge: 'Photoshop',
+                badgeClass: 'bg-info',
+                description: 'تصميم بطاقة عمل كلاسيكية مع لمسات عصرية'
+            },
+            {
+                image: './assets/images/project-05.webp',
+                title: 'Menu Card',
+                badge: 'Photoshop',
+                badgeClass: 'bg-info',
+                description: 'تصميم قائمة طعام جذابة مع صور شهية وتنظيم ممتاز'
+            },
+            {
+                image: './assets/images/project-06.webp',
+                title: 'Restaurant Menu',
+                badge: 'Corel Draw',
+                badgeClass: 'bg-info',
+                description: 'تصميم قائمة مطعم احترافية بألوان دافئة وتخطيط منظم'
+            }
+        ]
+    },
+    'design-web': {
+        title: 'معرض تصميمات الويب',
+        items: [
+            {
+                image: './assets/images/w1.webp',
+                title: 'Animation Website',
+                badge: 'Animation',
+                badgeClass: 'bg-info',
+                description: 'موقع رسوم متحركة تفاعلي بتقنيات حديثة ومؤثرات بصرية مذهلة',
+                websiteUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+            },
+            {
+                image: './assets/images/n1.webp',
+                title: 'الحياة داخل اليونان',
+                badge: 'Wordpress',
+                badgeClass: 'bg-info',
+                description: 'موقع ووردبريس متكامل عن الحياة في اليونان مع صور ومقالات',
+                websiteUrl: 'https://anon-site.github.io/greece/'
+            },
+            {
+                image: './assets/images/b1.webp',
+                title: 'Work Manager',
+                badge: 'Data Entry',
+                badgeClass: 'bg-info',
+                description: 'نظام إدارة العمل المتقدم مع قاعدة بيانات شاملة وواجهة سهلة',
+                websiteUrl: 'https://anon-site.github.io/Work-Manager/'
+            },
+            {
+                image: './assets/images/yemen.webp',
+                title: 'Yemen Website',
+                badge: 'Animation',
+                badgeClass: 'bg-info',
+                description: 'موقع تفاعلي عن اليمن مع رسوم متحركة وتصميم تراثي أصيل',
+                websiteUrl: 'https://anon-site.github.io/greece/'
+            },
+            {
+                image: './assets/images/q1.webp',
+                title: 'TV Player',
+                badge: 'Animation',
+                badgeClass: 'bg-info',
+                description: 'مشغل تلفزيون إلكتروني مع واجهة حديثة وميزات متقدمة',
+                websiteUrl: 'https://anon-site.github.io/noon.tv'
+            },
+            {
+                image: './assets/images/t1.webp',
+                title: 'Data List',
+                badge: 'Animation',
+                badgeClass: 'bg-info',
+                description: 'قائمة بيانات تفاعلية مع إمكانيات البحث والتصفية المتقدمة',
+                websiteUrl: 'https://www.stackoverflow.com'
+            }
+        ]
+    }
+};
+
+function openGallery(type) {
+    const modal = document.getElementById('galleryModal');
+    const title = document.getElementById('galleryTitle');
+    const grid = document.getElementById('galleryGrid');
+    
+    if (!modal || !galleryData[type]) return;
+    
+    // Set title
+    title.textContent = galleryData[type].title;
+    
+    // Clear grid
+    grid.innerHTML = '';
+    
+    // Add items to grid
+    galleryData[type].items.forEach((item, index) => {
+        const galleryItem = document.createElement('div');
+        galleryItem.className = 'gallery-item';
+        galleryItem.style.animationDelay = `${index * 0.1}s`;
+        galleryItem.innerHTML = `
+            <img src="${item.image}" alt="${item.title}" loading="lazy">
+            <div class="gallery-item-content">
+                <span class="badge ${item.badgeClass}">${item.badge}</span>
+                <h5>${item.title}</h5>
+                <p>${item.description}</p>
+            </div>
+        `;
+        
+        // Add click event to open image modal
+        galleryItem.addEventListener('click', () => {
+            openImageModalFromGallery(item);
+        });
+        
+        grid.appendChild(galleryItem);
+    });
+    
+    // Show modal
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    
+    // Pause slideshows
+    pauseAutoPlay();
+    pauseWebAutoPlay();
+}
+
+function openImageModalFromGallery(item) {
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBadge = document.getElementById('modalBadge');
+    const visitBtn = document.getElementById('visitWebsiteBtn');
+    
+    // Set modal content
+    modalImage.src = item.image;
+    modalImage.alt = item.title;
+    modalTitle.textContent = item.title;
+    modalBadge.textContent = item.badge;
+    modalBadge.className = `badge ${item.badgeClass}`;
+    
+    // Check if this is a Design Web item and show visit button
+    if (item.websiteUrl) {
+        const visitLink = visitBtn.querySelector('a');
+        visitLink.href = item.websiteUrl;
+        visitBtn.style.display = 'block';
+    } else {
+        visitBtn.style.display = 'none';
+    }
+    
+    // Close gallery modal
+    closeGallery();
+    
+    // Show image modal
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    
+    // Pause slideshows
+    pauseAutoPlay();
+    pauseWebAutoPlay();
+}
+
+function closeGallery() {
+    const modal = document.getElementById('galleryModal');
+    
+    // Hide modal
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+    
+    // Resume slideshows after a delay
+    setTimeout(() => {
+        startAutoPlay();
+        startWebAutoPlay();
+    }, 1000);
+}
+
+// Initialize gallery functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const galleryModal = document.getElementById('galleryModal');
+    const galleryClose = document.querySelector('.gallery-close');
+    
+    if (galleryClose) {
+        galleryClose.addEventListener('click', closeGallery);
+    }
+    
+    if (galleryModal) {
+        // Close modal when clicking outside
+        galleryModal.addEventListener('click', function(e) {
+            if (e.target === galleryModal) {
+                closeGallery();
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && galleryModal.classList.contains('show')) {
+                closeGallery();
+            }
+        });
+    }
+});
+
 // ===== IMAGE MODAL FUNCTIONALITY =====
 
 // Initialize image modal when DOM is loaded
@@ -359,7 +910,7 @@ function initializeImageModal() {
     const modalClose = document.querySelector('.modal-close');
     
     // Add click event to all images in slideshow, work, and models sections
-    const images = document.querySelectorAll('.slideshow-container img, #work .border-hover img, #Models .border-hover img');
+    const images = document.querySelectorAll('.slideshow-container img, .web-slideshow img, #work .border-hover img, #Models .border-hover img');
     
     images.forEach(img => {
         img.addEventListener('click', function() {
@@ -422,6 +973,24 @@ function openImageModal(imgElement) {
     modalBadge.textContent = badgeText;
     modalBadge.className = `badge ${badgeClass}`;
     
+    // Check if this is a Design Web image and show visit button
+    const visitBtn = document.getElementById('visitWebsiteBtn');
+    const isDesignWeb = imgElement.closest('.web-slideshow') || imgSrc.includes('w1.webp') || imgSrc.includes('n1.webp') || imgSrc.includes('b1.webp') || imgSrc.includes('yemen.webp') || imgSrc.includes('q1.webp') || imgSrc.includes('t1.webp');
+    
+    if (isDesignWeb) {
+        // Find the corresponding website URL from gallery data
+        const webItem = galleryData['design-web'].items.find(item => imgSrc.includes(item.image.split('/').pop()));
+        if (webItem && webItem.websiteUrl) {
+            const visitLink = visitBtn.querySelector('a');
+            visitLink.href = webItem.websiteUrl;
+            visitBtn.style.display = 'block';
+        } else {
+            visitBtn.style.display = 'none';
+        }
+    } else {
+        visitBtn.style.display = 'none';
+    }
+    
     // Show modal
     modal.classList.add('show');
     document.body.style.overflow = 'hidden'; // Prevent background scrolling
@@ -432,13 +1001,18 @@ function openImageModal(imgElement) {
 
 function closeImageModal() {
     const modal = document.getElementById('imageModal');
+    const visitBtn = document.getElementById('visitWebsiteBtn');
     
     // Hide modal
     modal.classList.remove('show');
     document.body.style.overflow = ''; // Restore scrolling
     
+    // Hide visit button
+    visitBtn.style.display = 'none';
+    
     // Resume slideshow after modal is closed
     setTimeout(() => {
         startAutoPlay();
+        startWebAutoPlay();
     }, 1000);
 }
