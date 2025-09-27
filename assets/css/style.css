@@ -1464,6 +1464,432 @@ footer::before {
     color: #ffffff;
 }
 
+/* ===== SIMPLIFIED SLIDESHOW STYLES ===== */
+
+/* Slideshow Container */
+.slideshow-container {
+    position: relative;
+    max-width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Individual Slides */
+.slide {
+    display: none;
+    padding: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.slide.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Navigation Arrows */
+.slideshow-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(13, 202, 240, 0.8);
+    color: white;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(13, 202, 240, 0.3);
+}
+
+.slideshow-nav:hover {
+    background: rgba(11, 94, 215, 0.9);
+    transform: translateY(-50%) scale(1.05);
+}
+
+.slideshow-nav.prev {
+    left: 15px;
+}
+
+.slideshow-nav.next {
+    right: 15px;
+}
+
+/* Dots Indicator */
+.slideshow-dots {
+    text-align: center;
+    padding: 15px 0;
+    position: relative;
+    z-index: 10;
+}
+
+.dot {
+    height: 12px;
+    width: 12px;
+    margin: 0 6px;
+    background-color: rgba(13, 202, 240, 0.4);
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dot:hover {
+    background-color: rgba(13, 202, 240, 0.7);
+    transform: scale(1.1);
+}
+
+.dot.active {
+    background-color: var(--bs-info);
+    transform: scale(1.2);
+}
+
+/* Simple Card Animations in Slideshow */
+.slideshow-container .border-hover {
+    transition: all 0.3s ease;
+}
+
+.slideshow-container .border-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(13, 202, 240, 0.2);
+}
+
+.slideshow-container .border-hover img {
+    transition: transform 0.3s ease;
+}
+
+.slideshow-container .border-hover:hover img {
+    transform: scale(1.05);
+}
+
+.slideshow-container .border-hover:hover h5 {
+    color: var(--bs-info);
+}
+
+/* Dark Theme Slideshow Styles */
+.dark-theme .slideshow-container {
+    background: rgba(42, 42, 42, 0.8);
+    border: 1px solid rgba(13, 202, 240, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme .slideshow-container .border-hover {
+    background-color: #2a2a2a;
+    border: 1px solid #3a3a3a;
+}
+
+.dark-theme .slideshow-container .border-hover:hover {
+    background-color: #3a3a3a;
+}
+
+.dark-theme .slideshow-container .border-hover h5 {
+    color: #ffffff;
+}
+
+.dark-theme .slideshow-container .border-hover:hover h5 {
+    color: var(--bs-info);
+}
+
+/* Responsive Design for Slideshow */
+@media (max-width: 768px) {
+    .slideshow-container {
+        margin: 0 10px;
+    }
+    
+    .slide {
+        padding: 1rem;
+    }
+    
+    /* Mobile: Show only one card per slide */
+    .slide .row .col-md-6.col-lg-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-bottom: 0;
+    }
+    
+    /* Hide other cards in mobile */
+    .slide .row .col-md-6.col-lg-4:nth-child(n+2) {
+        display: none;
+    }
+    
+    .slideshow-nav {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+    
+    .slideshow-nav.prev {
+        left: 10px;
+    }
+    
+    .slideshow-nav.next {
+        right: 10px;
+    }
+    
+    /* Mobile card adjustments */
+    .slideshow-container .border-hover {
+        padding: 1.5rem !important;
+        margin: 0 auto;
+        max-width: 350px;
+    }
+    
+    .slideshow-container .border-hover img {
+        height: 250px;
+        object-fit: cover;
+    }
+}
+
+@media (max-width: 576px) {
+    .slideshow-container {
+        margin: 0 5px;
+    }
+    
+    .slide {
+        padding: 0.8rem;
+    }
+    
+    .slideshow-nav {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+    
+    .slideshow-nav.prev {
+        left: 5px;
+    }
+    
+    .slideshow-nav.next {
+        right: 5px;
+    }
+    
+    /* Small mobile card adjustments */
+    .slideshow-container .border-hover {
+        padding: 1rem !important;
+        max-width: 300px;
+    }
+    
+    .slideshow-container .border-hover img {
+        height: 200px;
+    }
+    
+    .slideshow-container .border-hover h5 {
+        font-size: 1rem;
+    }
+    
+    .slideshow-container .border-hover .badge {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+}
+
+/* ===== IMAGE MODAL STYLES ===== */
+
+/* Modal Overlay */
+.image-modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    animation: modalFadeIn 0.3s ease;
+}
+
+.image-modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: modalSlideIn 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content img {
+    width: 100%;
+    height: auto;
+    max-height: 70vh;
+    object-fit: contain;
+    display: block;
+}
+
+/* Modal Caption */
+.modal-caption {
+    padding: 20px;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    text-align: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.modal-caption h5 {
+    margin: 0 0 10px 0;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.modal-caption .badge {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+}
+
+/* Close Button */
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: white;
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10001;
+    background: rgba(0, 0, 0, 0.5);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.modal-close:hover {
+    background: rgba(220, 53, 69, 0.8);
+    transform: scale(1.1);
+    color: white;
+}
+
+/* Modal Animations */
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Dark Theme Modal */
+.dark-theme .modal-content {
+    background: #2a2a2a;
+    border: 1px solid #3a3a3a;
+}
+
+.dark-theme .modal-caption {
+    background: linear-gradient(135deg, #3a3a3a, #2a2a2a);
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-theme .modal-caption h5 {
+    color: #ffffff;
+}
+
+.dark-theme .modal-close {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+.dark-theme .modal-close:hover {
+    background: rgba(220, 53, 69, 0.8);
+}
+
+/* Responsive Modal */
+@media (max-width: 768px) {
+    .modal-content {
+        max-width: 95%;
+        max-height: 95%;
+        margin: 20px;
+    }
+    
+    .modal-content img {
+        max-height: 60vh;
+    }
+    
+    .modal-caption {
+        padding: 15px;
+    }
+    
+    .modal-close {
+        top: 10px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 576px) {
+    .modal-content {
+        max-width: 98%;
+        margin: 10px;
+    }
+    
+    .modal-content img {
+        max-height: 50vh;
+    }
+    
+    .modal-caption {
+        padding: 12px;
+    }
+    
+    .modal-caption h5 {
+        font-size: 1rem;
+    }
+    
+    .modal-caption .badge {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+}
+
+/* Image Click Cursor */
+.slideshow-container img,
+#work .border-hover img,
+#Models .border-hover img {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.slideshow-container img:hover,
+#work .border-hover img:hover,
+#Models .border-hover img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
 
 
 
