@@ -177,10 +177,8 @@ fetch('https://api.ipify.org?format=json')
 
 let currentSlideIndex = 0;
 let currentWebSlideIndex = 0;
-let slideshowInterval;
-let webSlideshowInterval;
 
-// Animation types for slideshow
+// Enhanced Animation types for slideshow with smooth transitions
 const animationTypes = [
     'slide-slide-left',
     'slide-slide-right', 
@@ -190,7 +188,16 @@ const animationTypes = [
     'slide-rotate',
     'slide-flip',
     'slide-zoom',
-    'slide-fade'
+    'slide-fade',
+    'slide-bounce',
+    'slide-elastic',
+    'slide-spiral',
+    'slide-wave',
+    'slide-cube',
+    'slide-card-flip',
+    'slide-morph',
+    'slide-glide',
+    'slide-float'
 ];
 
 let currentAnimationType = 0;
@@ -233,14 +240,7 @@ function initializeSlideshow() {
     // Set initial state
     showSlide(0);
     
-    // Start auto-play after 2 seconds
-    setTimeout(() => {
-        startAutoPlay();
-    }, 2000);
-    
-    // Pause auto-play when user hovers over slideshow
-    slideshowContainer.addEventListener('mouseenter', pauseAutoPlay);
-    slideshowContainer.addEventListener('mouseleave', startAutoPlay);
+    // Auto-play removed - slideshow now manual only
 }
 
 function createMobileSlides(container) {
@@ -336,42 +336,13 @@ function changeSlide(direction) {
     if (newIndex < 0) newIndex = slides.length - 1;
     
     showSlide(newIndex);
-    
-    // Reset auto-play timer
-    pauseAutoPlay();
-    setTimeout(startAutoPlay, 4000);
 }
 
 function currentSlide(index) {
     showSlide(index - 1);
-    
-    // Reset auto-play timer
-    pauseAutoPlay();
-    setTimeout(startAutoPlay, 4000);
 }
 
-function startAutoPlay() {
-    pauseAutoPlay(); // Clear any existing interval
-    
-    slideshowInterval = setInterval(() => {
-        const slideshowContainer = document.querySelector('.slideshow-container');
-        if (!slideshowContainer) return;
-        
-        const slides = slideshowContainer.querySelectorAll('.slide');
-        let nextIndex = currentSlideIndex + 1;
-        
-        if (nextIndex >= slides.length) nextIndex = 0;
-        
-        showSlide(nextIndex);
-    }, 4000); // Change slide every 4 seconds
-}
-
-function pauseAutoPlay() {
-    if (slideshowInterval) {
-        clearInterval(slideshowInterval);
-        slideshowInterval = null;
-    }
-}
+// Auto-play functions removed - slideshow is now manual only
 
 // ===== DESIGN WEB SLIDESHOW FUNCTIONALITY =====
 
@@ -393,14 +364,7 @@ function initializeWebSlideshow() {
     // Set initial state
     showWebSlide(0);
     
-    // Start auto-play after 2 seconds
-    setTimeout(() => {
-        startWebAutoPlay();
-    }, 2000);
-    
-    // Pause auto-play when user hovers over slideshow
-    slideshowContainer.addEventListener('mouseenter', pauseWebAutoPlay);
-    slideshowContainer.addEventListener('mouseleave', startWebAutoPlay);
+    // Auto-play removed - slideshow now manual only
 }
 
 function createWebMobileSlides(container) {
@@ -496,179 +460,14 @@ function changeWebSlide(direction) {
     if (newIndex < 0) newIndex = slides.length - 1;
     
     showWebSlide(newIndex);
-    
-    // Reset auto-play timer
-    pauseWebAutoPlay();
-    setTimeout(startWebAutoPlay, 4000);
 }
 
 function currentWebSlide(index) {
     showWebSlide(index - 1);
-    
-    // Reset auto-play timer
-    pauseWebAutoPlay();
-    setTimeout(startWebAutoPlay, 4000);
 }
 
-function startWebAutoPlay() {
-    pauseWebAutoPlay(); // Clear any existing interval
-    
-    webSlideshowInterval = setInterval(() => {
-        const slideshowContainer = document.querySelector('.web-slideshow');
-        if (!slideshowContainer) return;
-        
-        const slides = slideshowContainer.querySelectorAll('.slide');
-        let nextIndex = currentWebSlideIndex + 1;
-        
-        if (nextIndex >= slides.length) nextIndex = 0;
-        
-        showWebSlide(nextIndex);
-    }, 4000); // Change slide every 4 seconds
-}
+// Web slideshow auto-play functions removed - slideshow is now manual only
 
-function pauseWebAutoPlay() {
-    if (webSlideshowInterval) {
-        clearInterval(webSlideshowInterval);
-        webSlideshowInterval = null;
-    }
-}
-
-// ===== ANIMATION CONTROL FUNCTIONS =====
-
-function changeAnimationType() {
-    currentAnimationType = (currentAnimationType + 1) % animationTypes.length;
-    
-    // Show notification
-    showAnimationNotification(animationTypes[currentAnimationType]);
-    
-    // Apply new animation to current slide
-    const slideshowContainer = document.querySelector('.slideshow-container');
-    if (slideshowContainer) {
-        const currentSlide = slideshowContainer.querySelector('.slide.active');
-        if (currentSlide) {
-            // Remove old animation class
-            animationTypes.forEach(type => currentSlide.classList.remove(type));
-            // Add new animation class
-            currentSlide.classList.add(animationTypes[currentAnimationType]);
-        }
-    }
-}
-
-function changeWebAnimationType() {
-    currentWebAnimationType = (currentWebAnimationType + 1) % animationTypes.length;
-    
-    // Show notification
-    showAnimationNotification(animationTypes[currentWebAnimationType]);
-    
-    // Apply new animation to current slide
-    const slideshowContainer = document.querySelector('.web-slideshow');
-    if (slideshowContainer) {
-        const currentSlide = slideshowContainer.querySelector('.slide.active');
-        if (currentSlide) {
-            // Remove old animation class
-            animationTypes.forEach(type => currentSlide.classList.remove(type));
-            // Add new animation class
-            currentSlide.classList.add(animationTypes[currentWebAnimationType]);
-        }
-    }
-}
-
-function showAnimationNotification(animationType) {
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = 'animation-notification';
-    notification.innerHTML = `
-        <div class="notification-content">
-            <i class="ri-magic-line"></i>
-            <span>نوع الحركة: ${getAnimationName(animationType)}</span>
-        </div>
-    `;
-    
-    // Add styles
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(13, 202, 240, 0.9);
-        color: white;
-        padding: 12px 20px;
-        border-radius: 25px;
-        font-size: 14px;
-        font-weight: 600;
-        z-index: 10000;
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 8px 25px rgba(13, 202, 240, 0.4);
-        animation: slideDownIn 0.5s ease;
-    `;
-    
-    // Add to page
-    document.body.appendChild(notification);
-    
-    // Remove after 2 seconds
-    setTimeout(() => {
-        notification.style.animation = 'slideUpOut 0.5s ease forwards';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 500);
-    }, 2000);
-}
-
-function getAnimationName(animationType) {
-    const names = {
-        'slide-slide-left': 'انزلاق من اليمين',
-        'slide-slide-right': 'انزلاق من اليسار',
-        'slide-slide-up': 'انزلاق من الأسفل',
-        'slide-slide-down': 'انزلاق من الأعلى',
-        'slide-scale': 'تكبير',
-        'slide-rotate': 'دوران',
-        'slide-flip': 'قلب',
-        'slide-zoom': 'زوم ثلاثي الأبعاد',
-        'slide-fade': 'تلاشي'
-    };
-    return names[animationType] || 'حركة افتراضية';
-}
-
-// Add CSS for notification animations
-const notificationStyles = document.createElement('style');
-notificationStyles.textContent = `
-    @keyframes slideDownIn {
-        0% {
-            opacity: 0;
-            transform: translateX(-50%) translateY(-20px);
-        }
-        100% {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-    }
-    
-    @keyframes slideUpOut {
-        0% {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-        100% {
-            opacity: 0;
-            transform: translateX(-50%) translateY(-20px);
-        }
-    }
-    
-    .notification-content {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    
-    .notification-content i {
-        font-size: 16px;
-    }
-`;
-document.head.appendChild(notificationStyles);
 
 // ===== GALLERY FUNCTIONALITY =====
 
@@ -815,9 +614,7 @@ function openGallery(type) {
     modal.classList.add('show');
     document.body.style.overflow = 'hidden';
     
-    // Pause slideshows
-    pauseAutoPlay();
-    pauseWebAutoPlay();
+    // Slideshows are now manual only
 }
 
 function openImageModalFromGallery(item) {
@@ -850,9 +647,7 @@ function openImageModalFromGallery(item) {
     modal.classList.add('show');
     document.body.style.overflow = 'hidden';
     
-    // Pause slideshows
-    pauseAutoPlay();
-    pauseWebAutoPlay();
+    // Slideshows are now manual only
 }
 
 function closeGallery() {
@@ -862,11 +657,7 @@ function closeGallery() {
     modal.classList.remove('show');
     document.body.style.overflow = '';
     
-    // Resume slideshows after a delay
-    setTimeout(() => {
-        startAutoPlay();
-        startWebAutoPlay();
-    }, 1000);
+    // Slideshows are now manual only
 }
 
 // Initialize gallery functionality
@@ -995,8 +786,7 @@ function openImageModal(imgElement) {
     modal.classList.add('show');
     document.body.style.overflow = 'hidden'; // Prevent background scrolling
     
-    // Pause slideshow when modal is open
-    pauseAutoPlay();
+    // Slideshow is now manual only
 }
 
 function closeImageModal() {
@@ -1010,9 +800,5 @@ function closeImageModal() {
     // Hide visit button
     visitBtn.style.display = 'none';
     
-    // Resume slideshow after modal is closed
-    setTimeout(() => {
-        startAutoPlay();
-        startWebAutoPlay();
-    }, 1000);
+    // Slideshow is now manual only
 }
