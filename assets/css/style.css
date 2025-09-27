@@ -473,24 +473,442 @@ a {
 /* Social Icons */
 .social-icons {
     display: flex;
-    gap: 15px;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* Pulse animation for social icons */
+@keyframes socialPulse {
+    0% {
+        box-shadow: 0 8px 25px rgba(13, 202, 240, 0.3), 
+                    0 0 0 1px rgba(255, 255, 255, 0.2);
+    }
+    50% {
+        box-shadow: 0 8px 25px rgba(13, 202, 240, 0.4), 
+                    0 0 0 1px rgba(255, 255, 255, 0.3),
+                    0 0 20px rgba(13, 202, 240, 0.3);
+    }
+    100% {
+        box-shadow: 0 8px 25px rgba(13, 202, 240, 0.3), 
+                    0 0 0 1px rgba(255, 255, 255, 0.2);
+    }
 }
 
 .social-icon {
-    width: 50px;
-    height: 50px;
+    animation: socialPulse 3s ease-in-out infinite;
+}
+
+.social-icon:hover {
+    animation: none;
+}
+
+
+/* Enhanced Contact Me Cards */
+#contact .service {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 249, 250, 0.8));
+    border: none;
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(13, 202, 240, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+#contact .service::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(13, 202, 240, 0.05), rgba(11, 94, 215, 0.05));
+    opacity: 0;
+    transition: all 0.4s ease;
+    z-index: 1;
+}
+
+#contact .service:hover::before {
+    opacity: 1;
+}
+
+#contact .service .icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    background: linear-gradient(135deg, rgba(13, 202, 240, 0.2), rgba(11, 94, 215, 0.2));
+    border: 3px solid rgba(13, 202, 240, 0.3);
+    box-shadow: 0 8px 25px rgba(13, 202, 240, 0.2);
+    position: relative;
+    z-index: 2;
+}
+
+#contact .service h5 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+    position: relative;
+    z-index: 2;
+}
+
+#contact .service a {
+    color: inherit;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    position: relative;
+    z-index: 2;
+}
+
+#contact .service a:hover {
+    color: var(--bs-info);
+    text-decoration: none;
+}
+
+#contact .service a:hover p {
+    transform: translateY(-3px);
+    text-shadow: 0 3px 6px rgba(13, 202, 240, 0.4);
+}
+
+#contact .service a p {
+    transition: all 0.3s ease;
+    margin-bottom: 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #495057;
+}
+
+#contact .service:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(13, 202, 240, 0.2),
+                0 0 0 1px rgba(13, 202, 240, 0.2);
+}
+
+#contact .service:hover .icon {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 12px 30px rgba(13, 202, 240, 0.3);
+}
+
+/* Dark theme contact cards */
+.dark-theme #contact .service {
+    background: linear-gradient(135deg, rgba(42, 42, 42, 0.9), rgba(58, 58, 58, 0.8));
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(13, 202, 240, 0.2);
+}
+
+.dark-theme #contact .service::before {
+    background: linear-gradient(135deg, rgba(13, 202, 240, 0.1), rgba(11, 94, 215, 0.1));
+}
+
+.dark-theme #contact .service h5 {
+    color: #ffffff;
+}
+
+.dark-theme #contact .service a p {
+    color: #e9ecef;
+}
+
+.dark-theme #contact .service:hover {
+    box-shadow: 0 20px 40px rgba(13, 202, 240, 0.3),
+                0 0 0 1px rgba(13, 202, 240, 0.3);
+}
+
+/* Contact Me Section Background Enhancement */
+#contact {
+    background: linear-gradient(135deg, rgba(248, 249, 250, 0.5), rgba(233, 236, 239, 0.3));
+    position: relative;
+}
+
+#contact::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 30% 20%, rgba(13, 202, 240, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(11, 94, 215, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+#contact .container {
+    position: relative;
+    z-index: 1;
+}
+
+/* Dark theme contact section background */
+.dark-theme #contact {
+    background: linear-gradient(135deg, rgba(26, 26, 26, 0.8), rgba(42, 42, 42, 0.6));
+}
+
+.dark-theme #contact::before {
+    background: radial-gradient(circle at 30% 20%, rgba(13, 202, 240, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(11, 94, 215, 0.05) 0%, transparent 50%);
+}
+
+/* Enhanced Contact Me Title */
+#contact .intro-section h1 {
+    background: linear-gradient(-45deg, #0dcaf0, #0b5ed7, #6f42c1, #0dcaf0);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 3s ease infinite;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+#contact .intro-section p {
+    font-size: 1.1rem;
+    color: #6c757d;
+    max-width: 600px;
+}
+
+.dark-theme #contact .intro-section h1 {
+    background: linear-gradient(-45deg, #0dcaf0, #66ccff, #aa66cc, #0dcaf0);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.dark-theme #contact .intro-section p {
+    color: #adb5bd;
+}
+
+/* Contact Me Cards Animation Enhancement */
+#contact .service {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+#contact .service:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+#contact .service:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+#contact .service:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Contact Me Cards Hover Effects */
+#contact .service::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, rgba(13, 202, 240, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.6s ease;
+    z-index: 0;
+}
+
+#contact .service:hover::after {
+    width: 200px;
+    height: 200px;
+}
+
+/* Responsive Contact Me Cards */
+@media (max-width: 768px) {
+    #contact .service {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    #contact .service .icon {
+        width: 70px;
+        height: 70px;
+    }
+    
+    #contact .intro-section h1 {
+        font-size: 2rem;
+    }
+}
+
+/* Contact Me Badges Styling */
+#contact .badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.5rem 0.75rem;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+#contact .badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+#contact .badge.bg-success {
+    background: linear-gradient(135deg, #25d366, #4caf50) !important;
+}
+
+#contact .badge.bg-primary {
+    background: linear-gradient(135deg, #665cac, #8e24aa) !important;
+}
+
+#contact .badge.bg-info {
+    background: linear-gradient(135deg, #17a2b8, #20c997) !important;
+}
+
+#contact .badge.bg-warning {
+    background: linear-gradient(135deg, #ffc107, #fd7e14) !important;
+    color: #000 !important;
+}
+
+#contact .badge.bg-danger {
+    background: linear-gradient(135deg, #dc3545, #e74c3c) !important;
+}
+
+#contact .badge.bg-secondary {
+    background: linear-gradient(135deg, #6c757d, #495057) !important;
+}
+
+/* Dark theme badges */
+.dark-theme #contact .badge {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme #contact .badge:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Location Card Specific Styling */
+#contact .service .small {
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+#contact .service .fw-semibold {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.dark-theme #contact .service .fw-semibold {
+    color: #ffffff;
+}
+
+.dark-theme #contact .service .text-muted {
+    color: #adb5bd !important;
+}
+
+/* Enhanced Footer Styling */
+footer {
+    background: linear-gradient(135deg, #0dcaf0, #0b5ed7) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.footer-content {
+    position: relative;
+    z-index: 1;
+}
+
+.footer-content h5 {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 1rem;
+}
+
+.footer-content p {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.footer-content a {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.footer-content a:hover {
+    color: #ffffff !important;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    transform: translateY(-2px);
+}
+
+.footer-content a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.8);
+    transition: width 0.3s ease;
+}
+
+.footer-content a:hover::after {
+    width: 100%;
+}
+
+/* Dark theme footer adjustments */
+.dark-theme footer {
+    background: linear-gradient(135deg, #0dcaf0, #0b5ed7) !important;
+}
+
+.dark-theme .footer-content h5 {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.dark-theme .footer-content p {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+
+.social-icon {
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 28px;
     color: white;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    background: linear-gradient(135deg, rgba(13, 202, 240, 0.3), rgba(11, 94, 215, 0.3));
+    border: 3px solid rgba(13, 202, 240, 0.5);
+    box-shadow: 0 8px 25px rgba(13, 202, 240, 0.3), 
+                0 0 0 1px rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .social-icon i {
@@ -522,8 +940,9 @@ a {
 
 .social-icon:hover i {
     color: white;
-    filter: brightness(1.2);
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    filter: brightness(1.4) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.9);
+    transform: scale(1.1);
 }
 
 .social-icon:hover::before {
@@ -536,41 +955,42 @@ a {
 }
 
 .social-icon:hover {
-    transform: translateY(-5px) scale(1.1);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    transform: translateY(-8px) scale(1.15);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.3);
 }
 
 /* Individual Social Icons Colors with Enhanced Glow */
 .social-icon.facebook:hover {
-    background: #1877f2;
+    background: linear-gradient(135deg, #1877f2, #42a5f5);
     border-color: #1877f2;
-    box-shadow: 0 0 15px rgba(24, 119, 242, 0.6),
-                0 0 25px rgba(24, 119, 242, 0.4),
-                0 0 35px rgba(24, 119, 242, 0.2);
+    box-shadow: 0 12px 30px rgba(24, 119, 242, 0.5),
+                0 0 0 1px rgba(24, 119, 242, 0.4),
+                0 0 30px rgba(24, 119, 242, 0.7);
 }
 
 .social-icon.telegram:hover {
-    background: #0088cc;
+    background: linear-gradient(135deg, #0088cc, #29b6f6);
     border-color: #0088cc;
-    box-shadow: 0 0 15px rgba(0, 136, 204, 0.6),
-                0 0 25px rgba(0, 136, 204, 0.4),
-                0 0 35px rgba(0, 136, 204, 0.2);
+    box-shadow: 0 12px 30px rgba(0, 136, 204, 0.5),
+                0 0 0 1px rgba(0, 136, 204, 0.4),
+                0 0 30px rgba(0, 136, 204, 0.7);
 }
 
 .social-icon.whatsapp:hover {
-    background: #25d366;
+    background: linear-gradient(135deg, #25d366, #4caf50);
     border-color: #25d366;
-    box-shadow: 0 0 15px rgba(37, 211, 102, 0.6),
-                0 0 25px rgba(37, 211, 102, 0.4),
-                0 0 35px rgba(37, 211, 102, 0.2);
+    box-shadow: 0 12px 30px rgba(37, 211, 102, 0.5),
+                0 0 0 1px rgba(37, 211, 102, 0.4),
+                0 0 30px rgba(37, 211, 102, 0.7);
 }
 
 .social-icon.youtube:hover {
-    background: #ff0000;
+    background: linear-gradient(135deg, #ff0000, #f44336);
     border-color: #ff0000;
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.6),
-                0 0 25px rgba(255, 0, 0, 0.4),
-                0 0 35px rgba(255, 0, 0, 0.2);
+    box-shadow: 0 12px 30px rgba(255, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 0, 0, 0.4),
+                0 0 30px rgba(255, 0, 0, 0.7);
 }
 
 .social-icon.tiktok:hover {
