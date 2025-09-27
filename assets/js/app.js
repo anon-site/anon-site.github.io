@@ -1,25 +1,4 @@
-const navbar = document.querySelector('.navbar')
-
-// Optimized scroll event with throttling
-let ticking = false;
-
-function updateNavbar() {
-    if(window.scrollY > 0) {
-        navbar.classList.remove('py-4')
-        navbar.classList.add('shadow', 'py-3')
-    } else {
-        navbar.classList.add('py-4')
-        navbar.classList.remove('shadow', 'py-3')
-    }
-    ticking = false;
-}
-
-window.addEventListener('scroll', () => {
-    if (!ticking) {
-        requestAnimationFrame(updateNavbar);
-        ticking = true;
-    }
-})
+// Navbar scroll effects removed - navbar is now always visible
 
 // AOS
 AOS.init({

@@ -90,12 +90,12 @@ a {
     background: linear-gradient(90deg, transparent, #0dcaf0, transparent);
 }
 
-/* Enhanced Navbar Styles */
+/* Enhanced Navbar Styles - Fixed visibility */
 .navbar {
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     padding: 1rem 0;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
 }
 
 .navbar .navbar-brand {
@@ -197,7 +197,7 @@ a {
 
 /* Dark Mode Navbar Adjustments */
 .dark-theme .navbar {
-    background-color: rgba(26, 26, 26, 0.9) !important;
+    background-color: rgba(26, 26, 26, 0.95) !important;
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
 }
 
@@ -221,8 +221,7 @@ a {
 
 /* Light Mode Navbar Adjustments */
 .navbar {
-    background-color: rgba(255, 255, 255, 0.9) !important;
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.95) !important;
 }
 
 .navbar .navbar-brand,
@@ -1439,46 +1438,9 @@ footer::before {
     animation: loading 2s infinite;
 }
 
-/* Smooth Scroll Enhancement */
-html {
-    scroll-behavior: smooth;
-}
+/* Smooth Scroll Enhancement - Removed */
 
-/* Performance optimization for smooth scrolling */
-* {
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    -webkit-perspective: 1000;
-    perspective: 1000;
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(45deg, #0dcaf0, #0b5ed7);
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(45deg, #0b5ed7, #0dcaf0);
-}
-
-.dark-theme ::-webkit-scrollbar-track {
-    background: #2a2a2a;
-}
-
-.dark-theme ::-webkit-scrollbar-thumb {
-    background: linear-gradient(45deg, #0dcaf0, #66ccff);
-}
+/* Custom Scrollbar - Removed */
 
 /* Text colors inside dark cards */
 
