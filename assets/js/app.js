@@ -717,9 +717,11 @@ function initializeImageModal() {
         img.removeEventListener('click', handleImageClick);
         img.removeEventListener('touchstart', handleImageClick);
         
-        // Add both click and touchstart events for better mobile support
+        // Add click event for desktop
         img.addEventListener('click', handleImageClick);
-        img.addEventListener('touchstart', handleImageClick);
+        
+        // Add touchstart event for mobile with better handling
+        img.addEventListener('touchstart', handleImageClick, { passive: false });
         
         // Add visual feedback for mobile
         img.style.cursor = 'pointer';
@@ -760,16 +762,66 @@ function initializeImageModal() {
 
 // Separate function to handle image clicks
 function handleImageClick(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    // Prevent double-tap zoom on mobile
+    // For touch events, use a different approach
     if (e.type === 'touchstart') {
-        e.preventDefault();
+        // Store the touch start info
+        const touch = e.touches[0];
+        this.touchStartY = touch.clientY;
+        this.touchStartX = touch.clientX;
+        this.touchStartTime = Date.now();
+        this.isScrolling = false;
+        
+        // Add touch move listener to detect scroll
+        const touchMoveHandler = (moveEvent) => {
+            const currentTouch = moveEvent.touches[0];
+            const deltaY = Math.abs(currentTouch.clientY - this.touchStartY);
+            const deltaX = Math.abs(currentTouch.clientX - this.touchStartX);
+            
+            // If significant movement, it's a scroll
+            if (deltaY > 10 || deltaX > 10) {
+                this.isScrolling = true;
+            }
+        };
+        
+        // Add touch end listener to check if it was a tap
+        const touchEndHandler = (endEvent) => {
+            // If it was scrolling, don't open modal
+            if (this.isScrolling) {
+                this.removeEventListener('touchmove', touchMoveHandler);
+                this.removeEventListener('touchend', touchEndHandler);
+                return;
+            }
+            
+            const touch = endEvent.changedTouches[0];
+            const deltaY = Math.abs(touch.clientY - this.touchStartY);
+            const deltaX = Math.abs(touch.clientX - this.touchStartX);
+            const deltaTime = Date.now() - this.touchStartTime;
+            
+            // If it's a quick tap (not a scroll), open modal
+            if (deltaY < 10 && deltaX < 10 && deltaTime < 300) {
+                e.preventDefault();
+                e.stopPropagation();
+                openImageModal(this);
+            }
+            
+            // Clean up
+            this.removeEventListener('touchmove', touchMoveHandler);
+            this.removeEventListener('touchend', touchEndHandler);
+        };
+        
+        this.addEventListener('touchmove', touchMoveHandler, { passive: true });
+        this.addEventListener('touchend', touchEndHandler);
+        return;
     }
     
-    openImageModal(this);
+    // For mouse clicks, open modal directly
+    if (e.type === 'click') {
+        e.preventDefault();
+        e.stopPropagation();
+        openImageModal(this);
+    }
 }
+
 
 function openImageModal(imgElement) {
     const modal = document.getElementById('imageModal');
