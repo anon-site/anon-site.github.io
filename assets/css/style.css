@@ -3045,58 +3045,77 @@ footer .container::after {
 /* Visit Website Button */
 .visit-website-btn {
     display: inline-block;
+    margin-left: 10px;
 }
 
-.visit-website-btn a {
+.visit-website-btn a,
+.visit-website-btn .visit-link {
     display: inline-flex;
     align-items: center;
     gap: 4px;
     background: #0dcaf0;
     color: white;
     text-decoration: none;
-    padding: 4px 8px;
-    border-radius: 12px;
+    padding: 6px 12px;
+    border-radius: 15px;
     font-weight: 600;
-    font-size: 11px;
-    transition: all 0.2s ease;
+    font-size: 12px;
+    transition: all 0.3s ease;
     border: 1px solid #0dcaf0;
+    box-shadow: 0 2px 8px rgba(13, 202, 240, 0.3);
+    cursor: pointer;
+    position: relative;
+    z-index: 10;
+}
+
+.visit-website-btn a:hover,
+.visit-website-btn .visit-link:hover {
+    background: #0b5ed7;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(13, 202, 240, 0.4);
+    border-color: #0b5ed7;
+    text-decoration: none;
+}
+
+.visit-website-btn a:active,
+.visit-website-btn .visit-link:active {
+    transform: translateY(0);
     box-shadow: 0 2px 8px rgba(13, 202, 240, 0.3);
 }
 
-.visit-website-btn a:hover {
-    background: #0b5ed7;
-    color: white;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(13, 202, 240, 0.4);
-    border-color: #0b5ed7;
+.visit-website-btn a i,
+.visit-website-btn .visit-link i {
+    font-size: 11px;
+    transition: all 0.3s ease;
 }
 
-.visit-website-btn a i {
-    font-size: 10px;
-    transition: all 0.2s ease;
-}
-
-.visit-website-btn a:hover i {
+.visit-website-btn a:hover i,
+.visit-website-btn .visit-link:hover i {
     transform: scale(1.1);
 }
 
-.visit-website-btn a span {
-    transition: all 0.2s ease;
+.visit-website-btn a span,
+.visit-website-btn .visit-link span {
+    transition: all 0.3s ease;
 }
 
-.visit-website-btn a:hover span {
+.visit-website-btn a:hover span,
+.visit-website-btn .visit-link:hover span {
     transform: translateX(1px);
 }
 
 /* Dark theme visit button */
-.dark-theme .visit-website-btn a {
+.dark-theme .visit-website-btn a,
+.dark-theme .visit-website-btn .visit-link {
     background: #0dcaf0;
     color: white;
     border: 1px solid #0dcaf0;
     box-shadow: 0 2px 8px rgba(13, 202, 240, 0.4);
 }
 
-.dark-theme .visit-website-btn a:hover {
+.dark-theme .visit-website-btn a:hover,
+.dark-theme .visit-website-btn .visit-link:hover {
     background: #0b5ed7;
     color: white;
     box-shadow: 0 4px 12px rgba(13, 202, 240, 0.5);
@@ -3339,12 +3358,13 @@ footer .container::after {
     }
     
     .visit-website-btn a {
-        padding: 3px 6px;
-        font-size: 10px;
+        padding: 4px 8px;
+        font-size: 11px;
+        border-radius: 12px;
     }
     
     .visit-website-btn a i {
-        font-size: 9px;
+        font-size: 10px;
     }
 }
 

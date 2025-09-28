@@ -533,7 +533,7 @@ const galleryData = {
                 badge: 'Animation',
                 badgeClass: 'bg-info',
                 description: 'Interactive animation website with modern technologies and stunning visual effects',
-                websiteUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+                websiteUrl: 'https://anon-site.github.io/animation/'
             },
             {
                 image: './assets/images/t1.webp',
@@ -541,7 +541,7 @@ const galleryData = {
                 badge: 'Animation',
                 badgeClass: 'bg-info',
                 description: 'Interactive data list with advanced search and filtering capabilities',
-                websiteUrl: 'https://www.stackoverflow.com'
+                websiteUrl: 'https://anon-site.github.io/data-table/'
             }
         ]
     }
@@ -632,7 +632,24 @@ function openImageModalFromGallery(item) {
     if (item.websiteUrl) {
         const visitLink = visitBtn.querySelector('a');
         visitLink.href = item.websiteUrl;
+        visitLink.target = '_blank';
+        visitLink.rel = 'noopener noreferrer';
+        visitLink.className = 'visit-link';
         visitBtn.style.display = 'block';
+        
+        // Add click event to ensure the link works
+        visitLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Try to open the link
+            try {
+                window.open(this.href, '_blank', 'noopener,noreferrer');
+            } catch (error) {
+                // Fallback: try to navigate directly
+                window.location.href = this.href;
+            }
+        });
     } else {
         visitBtn.style.display = 'none';
     }
@@ -895,7 +912,24 @@ function openImageModal(imgElement) {
         if (webItem && webItem.websiteUrl) {
             const visitLink = visitBtn.querySelector('a');
             visitLink.href = webItem.websiteUrl;
+            visitLink.target = '_blank';
+            visitLink.rel = 'noopener noreferrer';
+            visitLink.className = 'visit-link';
             visitBtn.style.display = 'block';
+            
+            // Add click event to ensure the link works
+            visitLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Try to open the link
+                try {
+                    window.open(this.href, '_blank', 'noopener,noreferrer');
+                } catch (error) {
+                    // Fallback: try to navigate directly
+                    window.location.href = this.href;
+                }
+            });
         } else {
             visitBtn.style.display = 'none';
         }
