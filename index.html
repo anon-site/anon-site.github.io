@@ -507,9 +507,9 @@
             
             <!-- More Button -->
             <div class="more-control">
-                <button class="more-btn" onclick="openGallery('design-print')" title="رؤية جميع المشاريع">
+                <button class="more-btn" onclick="openGallery('design-print')" title="View All Projects">
                     <i class="ri-eye-line"></i>
-                    <span>المزيد</span>
+                    <span>More</span>
                 </button>
             </div>
         </div>
@@ -535,16 +535,16 @@
                 <div class="row gy-4 justify-content-center">
                     <div class="col-md-6 col-lg-4">
                         <div class="p-4 border-hover shadow rounded-5">
-                            <img src="./assets/images/w1.webp" class="img-fluid rounded-5 mb-3" alt="Animation Website" loading="lazy">
+                            <img src="./assets/images/yemen.webp" class="img-fluid rounded-5 mb-3" alt="الحياة في اليونان" loading="lazy">
                             <span class="badge bg-info">Animation</span>
-                            <a href="https://anon-site.github.io/animation/" class="d-block mt-2"><h5 class="fw-bold">Animation</h5></a>
+                            <a href="https://anon-site.github.io/greece/" class="d-block mt-2"><h5 class="fw-bold">الحياة في اليونان</h5></a>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-4">
                         <div class="p-4 border-hover shadow rounded-5">
-                            <img src="./assets/images/n1.webp" class="img-fluid rounded-5 mb-3" alt="Greece Life Website" loading="lazy">
-                            <span class="badge bg-info">Wordpress</span>
-                            <a href="https://anon-site.github.io/greece/" class="d-block mt-2"><h5 class="fw-bold">الحياة داخل اليونان</h5></a>
+                            <img src="./assets/images/q1.webp" class="img-fluid rounded-5 mb-3" alt="TV Player Website" loading="lazy">
+                            <span class="badge bg-info">Animation</span>
+                            <a href="https://anon-site.github.io/noon.tv" class="d-block mt-2"><h5 class="fw-bold">TV Player</h5></a>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-4">
@@ -561,16 +561,9 @@
                 <div class="row gy-4 justify-content-center">
                     <div class="col-md-6 col-lg-4">
                         <div class="p-4 border-hover shadow rounded-5">
-                            <img src="./assets/images/yemen.webp" class="img-fluid rounded-5 mb-3" alt="Yemen Website" loading="lazy">
+                            <img src="./assets/images/w1.webp" class="img-fluid rounded-5 mb-3" alt="Animation Website" loading="lazy">
                             <span class="badge bg-info">Animation</span>
-                            <a href="https://anon-site.github.io/greece/" class="d-block mt-2"><h5 class="fw-bold">الحياة داخل اليونان</h5></a>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="p-4 border-hover shadow rounded-5">
-                            <img src="./assets/images/q1.webp" class="img-fluid rounded-5 mb-3" alt="TV Player Website" loading="lazy">
-                            <span class="badge bg-info">Animation</span>
-                            <a href="https://anon-site.github.io/noon.tv" class="d-block mt-2"><h5 class="fw-bold">TV Player</h5></a>
+                            <a href="https://anon-site.github.io/animation/" class="d-block mt-2"><h5 class="fw-bold">Animation</h5></a>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-4">
@@ -600,9 +593,9 @@
             
             <!-- More Button -->
             <div class="more-control">
-                <button class="more-btn" onclick="openGallery('design-web')" title="رؤية جميع المشاريع">
+                <button class="more-btn" onclick="openGallery('design-web')" title="View All Projects">
                     <i class="ri-eye-line"></i>
-                    <span>المزيد</span>
+                    <span>More</span>
                 </button>
             </div>
         </div>
@@ -740,6 +733,7 @@
 <script src="./assets/js/bootstrap.bundle.min.js" defer></script>
 <script src="https://unpkg.com/aos@next/dist/aos.js" defer></script>
 <script src="./assets/js/app.js" defer></script>
+<script src="./assets/js/design-web-manager.js" defer></script>
 
 <!-- Dark/Light Mode Toggle Switch -->
 <label class="ui-switch" id="themeSwitchLabel">
@@ -762,6 +756,7 @@
         <div class="modal-caption">
             <div class="modal-title-row">
                 <h5 id="modalTitle"></h5>
+                <span id="modalBadge" class="badge"></span>
                 <div id="visitWebsiteBtn" class="visit-website-btn" style="display: none;">
                     <a href="#" target="_blank" rel="noopener noreferrer">
                         <i class="ri-external-link-line"></i>
@@ -769,7 +764,6 @@
                     </a>
                 </div>
             </div>
-            <span id="modalBadge" class="badge"></span>
         </div>
     </div>
 </div>

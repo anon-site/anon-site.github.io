@@ -2225,34 +2225,48 @@ footer::before {
     background: linear-gradient(135deg, #f8f9fa, #e9ecef);
     text-align: center;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .modal-caption h5 {
     margin: 0 0 10px 0;
     color: #2c3e50;
     font-weight: 600;
+    text-align: center;
+    width: 100%;
 }
 
 .modal-caption .badge {
     font-size: 0.9rem;
     padding: 8px 15px;
+    margin-bottom: 10px;
 }
 
 .modal-title-row {
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    gap: 15px;
     margin-bottom: 10px;
+    width: 100%;
+    flex-wrap: wrap;
 }
 
 .modal-title-row h5 {
     margin: 0;
-    flex: 1;
+    text-align: center;
+}
+
+.modal-caption .badge {
+    margin: 0;
+    display: inline-block;
 }
 
 /* Visit Website Button */
 .visit-website-btn {
-    margin-top: 8px;
     display: inline-block;
 }
 
@@ -2370,10 +2384,35 @@ footer::before {
 .dark-theme .modal-caption {
     background: linear-gradient(135deg, #3a3a3a, #2a2a2a);
     border-top-color: rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .dark-theme .modal-caption h5 {
     color: #ffffff;
+    text-align: center;
+    width: 100%;
+}
+
+.dark-theme .modal-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 10px;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.dark-theme .modal-title-row h5 {
+    text-align: center;
+}
+
+.dark-theme .modal-caption .badge {
+    margin: 0;
+    display: inline-block;
 }
 
 .dark-theme .modal-close {
@@ -2429,8 +2468,22 @@ footer::before {
     }
     
     .modal-title-row {
-        gap: 8px;
+        gap: 10px;
         margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    
+    .modal-title-row h5 {
+        text-align: center;
+    }
+    
+    .modal-caption .badge {
+        margin: 0;
+        display: inline-block;
     }
     
     .modal-caption .badge {

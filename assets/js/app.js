@@ -479,85 +479,61 @@ function currentWebSlide(index) {
 // Gallery data
 const galleryData = {
     'design-print': {
-        title: 'معرض تصميمات الطباعة',
+        title: 'Print Design Gallery',
         items: [
             {
                 image: './assets/images/project-01.webp',
                 title: 'Business Card',
                 badge: 'Photoshop',
                 badgeClass: 'bg-info',
-                description: 'تصميم بطاقة عمل احترافية بألوان جذابة وتخطيط متقن'
+                description: 'Professional business card design with attractive colors and refined layout'
             },
             {
                 image: './assets/images/project-02.webp',
                 title: 'Business Card',
                 badge: 'Photoshop',
                 badgeClass: 'bg-info',
-                description: 'تصميم بطاقة عمل أنيقة مع تأثيرات بصرية مميزة'
+                description: 'Elegant business card design with distinctive visual effects'
             },
             {
                 image: './assets/images/project-03.webp',
                 title: 'Business Card',
                 badge: 'Photoshop',
                 badgeClass: 'bg-info',
-                description: 'تصميم بطاقة عمل عصرية بأسلوب مينيمالي أنيق'
+                description: 'Modern business card design with elegant minimalist style'
             },
             {
                 image: './assets/images/project-04.webp',
                 title: 'Business Card',
                 badge: 'Photoshop',
                 badgeClass: 'bg-info',
-                description: 'تصميم بطاقة عمل كلاسيكية مع لمسات عصرية'
+                description: 'Classic business card design with modern touches'
             },
             {
                 image: './assets/images/project-05.webp',
                 title: 'Menu Card',
                 badge: 'Photoshop',
                 badgeClass: 'bg-info',
-                description: 'تصميم قائمة طعام جذابة مع صور شهية وتنظيم ممتاز'
+                description: 'Attractive menu design with appetizing images and excellent organization'
             },
             {
                 image: './assets/images/project-06.webp',
                 title: 'Restaurant Menu',
                 badge: 'Corel Draw',
                 badgeClass: 'bg-info',
-                description: 'تصميم قائمة مطعم احترافية بألوان دافئة وتخطيط منظم'
+                description: 'Professional restaurant menu design with warm colors and organized layout'
             }
         ]
     },
     'design-web': {
-        title: 'معرض تصميمات الويب',
+        title: 'Web Design Gallery',
         items: [
             {
-                image: './assets/images/w1.webp',
-                title: 'Animation Website',
-                badge: 'Animation',
-                badgeClass: 'bg-info',
-                description: 'موقع رسوم متحركة تفاعلي بتقنيات حديثة ومؤثرات بصرية مذهلة',
-                websiteUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-            },
-            {
-                image: './assets/images/n1.webp',
-                title: 'الحياة داخل اليونان',
-                badge: 'Wordpress',
-                badgeClass: 'bg-info',
-                description: 'موقع ووردبريس متكامل عن الحياة في اليونان مع صور ومقالات',
-                websiteUrl: 'https://anon-site.github.io/greece/'
-            },
-            {
-                image: './assets/images/b1.webp',
-                title: 'Work Manager',
-                badge: 'Data Entry',
-                badgeClass: 'bg-info',
-                description: 'نظام إدارة العمل المتقدم مع قاعدة بيانات شاملة وواجهة سهلة',
-                websiteUrl: 'https://anon-site.github.io/Work-Manager/'
-            },
-            {
                 image: './assets/images/yemen.webp',
-                title: 'Yemen Website',
+                title: 'الحياة في اليونان',
                 badge: 'Animation',
                 badgeClass: 'bg-info',
-                description: 'موقع تفاعلي عن اليمن مع رسوم متحركة وتصميم تراثي أصيل',
+                description: 'Life in Greece - A free service website about everything related to Greece in a simple and easy way',
                 websiteUrl: 'https://anon-site.github.io/greece/'
             },
             {
@@ -565,15 +541,31 @@ const galleryData = {
                 title: 'TV Player',
                 badge: 'Animation',
                 badgeClass: 'bg-info',
-                description: 'مشغل تلفزيون إلكتروني مع واجهة حديثة وميزات متقدمة',
+                description: 'Electronic TV player with modern interface and advanced features',
                 websiteUrl: 'https://anon-site.github.io/noon.tv'
+            },
+            {
+                image: './assets/images/b1.webp',
+                title: 'Work Manager',
+                badge: 'Data Entry',
+                badgeClass: 'bg-info',
+                description: 'Advanced work management system with comprehensive database and easy interface',
+                websiteUrl: 'https://anon-site.github.io/Work-Manager/'
+            },
+            {
+                image: './assets/images/w1.webp',
+                title: 'Animation Website',
+                badge: 'Animation',
+                badgeClass: 'bg-info',
+                description: 'Interactive animation website with modern technologies and stunning visual effects',
+                websiteUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
             },
             {
                 image: './assets/images/t1.webp',
                 title: 'Data List',
                 badge: 'Animation',
                 badgeClass: 'bg-info',
-                description: 'قائمة بيانات تفاعلية مع إمكانيات البحث والتصفية المتقدمة',
+                description: 'Interactive data list with advanced search and filtering capabilities',
                 websiteUrl: 'https://www.stackoverflow.com'
             }
         ]
