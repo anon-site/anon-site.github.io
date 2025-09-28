@@ -821,21 +821,6 @@
                 </label>
             </div>
             
-            <div class="setting-divider"></div>
-            
-            <div class="setting-item">
-                <button class="setting-action-btn" id="resetSettings">
-                    <i class="ri-refresh-line"></i>
-                    Reset Settings
-                </button>
-            </div>
-            
-            <div class="setting-item">
-                <button class="setting-action-btn" id="clearCookies">
-                    <i class="ri-delete-bin-line"></i>
-                    Clear Cookies
-                </button>
-            </div>
         </div>
     </div>
 </div>
@@ -886,8 +871,6 @@
     const animationsToggle = document.getElementById('animationsToggle');
     const autoScrollToggle = document.getElementById('autoScrollToggle');
     const soundToggle = document.getElementById('soundToggle');
-    const resetSettings = document.getElementById('resetSettings');
-    const clearCookies = document.getElementById('clearCookies');
     const body = document.body;
 
     // Load saved settings
@@ -1076,16 +1059,6 @@
                 toggle.setAttribute('data-sound-listener', 'true');
             });
             
-            // Action buttons
-            resetSettings.addEventListener('click', () => {
-                playSound(300, 0.2);
-            });
-            resetSettings.setAttribute('data-sound-listener', 'true');
-            
-            clearCookies.addEventListener('click', () => {
-                playSound(200, 0.2);
-            });
-            clearCookies.setAttribute('data-sound-listener', 'true');
             
             // Image clicks
             document.querySelectorAll('.slideshow-container img, .web-slideshow img, #work .border-hover img, #Models .border-hover img').forEach(img => {
@@ -1105,35 +1078,6 @@
         }
     }
 
-    // Reset Settings
-    resetSettings.addEventListener('click', () => {
-        if (confirm('Are you sure you want to reset all settings?')) {
-            localStorage.removeItem('siteSettings');
-            location.reload();
-        }
-    });
-
-    // Clear Cookies
-    clearCookies.addEventListener('click', () => {
-        if (confirm('Are you sure you want to clear all cookies and local storage data?')) {
-            // Clear localStorage
-            localStorage.clear();
-            
-            // Clear sessionStorage
-            sessionStorage.clear();
-            
-            // Clear cookies (if any)
-            document.cookie.split(";").forEach(function(c) { 
-                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
-            });
-            
-            // Show success message
-            alert('All cookies and local data have been cleared successfully!');
-            
-            // Reload page to apply changes
-            location.reload();
-        }
-    });
 
     // Load settings on page load
     loadSettings();
