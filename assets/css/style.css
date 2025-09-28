@@ -1837,6 +1837,32 @@ footer::before {
     transform: translateY(-2px);
 }
 
+/* Web Visit Button */
+.web-visit-btn {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.web-visit-btn .btn {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.web-visit-btn .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(13, 202, 240, 0.3);
+}
+
+.web-visit-btn .btn i {
+    font-size: 0.9rem;
+}
+
 /* Dark Theme Slideshow Styles */
 .dark-theme .slideshow-container {
     background: rgba(42, 42, 42, 0.8);
@@ -1859,6 +1885,17 @@ footer::before {
 
 .dark-theme .slideshow-container .border-hover:hover h5 {
     color: var(--bs-info);
+}
+
+.dark-theme .web-visit-btn .btn {
+    color: var(--bs-info);
+    border-color: var(--bs-info);
+}
+
+.dark-theme .web-visit-btn .btn:hover {
+    background-color: var(--bs-info);
+    color: white;
+    box-shadow: 0 4px 12px rgba(13, 202, 240, 0.4);
 }
 
 /* Simplified Mobile Design for Slideshow */
@@ -1919,6 +1956,19 @@ footer::before {
     .slideshow-container .border-hover:hover img {
         transform: scale(1.03);
     }
+    
+    .web-visit-btn {
+        margin-top: 12px;
+    }
+    
+    .web-visit-btn .btn {
+        font-size: 0.75rem;
+        padding: 5px 10px;
+    }
+    
+    .web-visit-btn .btn i {
+        font-size: 0.8rem;
+    }
 }
 
 @media (max-width: 576px) {
@@ -1962,6 +2012,19 @@ footer::before {
         font-size: 0.8rem;
         padding: 6px 12px;
     }
+    
+    .web-visit-btn {
+        margin-top: 10px;
+    }
+    
+    .web-visit-btn .btn {
+        font-size: 0.7rem;
+        padding: 4px 8px;
+    }
+    
+    .web-visit-btn .btn i {
+        font-size: 0.75rem;
+    }
 }
 
 /* Design Web Slideshow Mobile Styles */
@@ -1986,6 +2049,15 @@ footer::before {
         height: 250px;
         object-fit: cover;
     }
+    
+    .web-slideshow .web-visit-btn {
+        margin-top: 12px;
+    }
+    
+    .web-slideshow .web-visit-btn .btn {
+        font-size: 0.75rem;
+        padding: 5px 10px;
+    }
 }
 
 @media (max-width: 576px) {
@@ -2005,6 +2077,15 @@ footer::before {
     .web-slideshow .border-hover .badge {
         font-size: 0.8rem;
         padding: 6px 12px;
+    }
+    
+    .web-slideshow .web-visit-btn {
+        margin-top: 10px;
+    }
+    
+    .web-slideshow .web-visit-btn .btn {
+        font-size: 0.7rem;
+        padding: 4px 8px;
     }
 }
 
