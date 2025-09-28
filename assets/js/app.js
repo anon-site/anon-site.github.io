@@ -565,12 +565,26 @@ function openGallery(type) {
         const galleryItem = document.createElement('div');
         galleryItem.className = 'gallery-item';
         galleryItem.style.animationDelay = `${index * 0.1}s`;
+        
+        // Get technologies and date for this item
+        const technologies = getTechnologiesForProject(item.title);
+        const projectDate = getProjectDate(item.title);
+        
+        // Create technologies HTML
+        const technologiesHTML = technologies.map(tech => 
+            `<span class="gallery-tech-tag">${tech}</span>`
+        ).join('');
+        
         galleryItem.innerHTML = `
             <img src="${item.image}" alt="${item.title}" loading="lazy">
             <div class="gallery-item-content">
                 <span class="badge ${item.badgeClass}">${item.badge}</span>
                 <h5>${item.title}</h5>
-                <p>${item.description}</p>
+                <p class="gallery-description">${item.description}</p>
+                <div class="gallery-technologies">
+                    ${technologiesHTML}
+                </div>
+                <p class="gallery-date">Project Date: ${projectDate}</p>
             </div>
         `;
         
@@ -603,6 +617,16 @@ function openImageModalFromGallery(item) {
     modalTitle.textContent = item.title;
     modalBadge.textContent = item.badge;
     modalBadge.className = `badge ${item.badgeClass}`;
+    
+    // Get detailed information for gallery item
+    const description = item.description || '';
+    const technologies = getTechnologiesForProject(item.title);
+    const projectDate = getProjectDate(item.title);
+    
+    // Add detailed information to modal
+    setTimeout(() => {
+        addModalDetails(description, technologies, projectDate);
+    }, 100);
     
     // Check if this is a Design Web item and show visit button
     if (item.websiteUrl) {
@@ -762,6 +786,9 @@ function openImageModal(imgElement) {
     let title = 'Design Work';
     let badgeText = 'Design';
     let badgeClass = 'bg-info';
+    let description = '';
+    let technologies = [];
+    let projectDate = '';
     
     if (card) {
         const titleElement = card.querySelector('h5');
@@ -777,6 +804,25 @@ function openImageModal(imgElement) {
         }
     }
     
+    // Get detailed information from gallery data
+    const isDesignWeb = imgElement.closest('.web-slideshow') || imgSrc.includes('w1.webp') || imgSrc.includes('n1.webp') || imgSrc.includes('b1.webp') || imgSrc.includes('yemen.webp') || imgSrc.includes('q1.webp') || imgSrc.includes('t1.webp');
+    
+    if (isDesignWeb) {
+        const webItem = galleryData['design-web'].items.find(item => imgSrc.includes(item.image.split('/').pop()));
+        if (webItem) {
+            description = webItem.description || '';
+            technologies = getTechnologiesForProject(title);
+            projectDate = getProjectDate(title);
+        }
+    } else {
+        const printItem = galleryData['design-print'].items.find(item => imgSrc.includes(item.image.split('/').pop()));
+        if (printItem) {
+            description = printItem.description || '';
+            technologies = getTechnologiesForProject(title);
+            projectDate = getProjectDate(title);
+        }
+    }
+    
     // Set modal content
     modalImage.src = imgSrc;
     modalImage.alt = imgAlt;
@@ -784,12 +830,15 @@ function openImageModal(imgElement) {
     modalBadge.textContent = badgeText;
     modalBadge.className = `badge ${badgeClass}`;
     
+    // Add detailed information to modal
+    setTimeout(() => {
+        addModalDetails(description, technologies, projectDate);
+    }, 100);
+    
     // Check if this is a Design Web image and show visit button
     const visitBtn = document.getElementById('visitWebsiteBtn');
-    const isDesignWeb = imgElement.closest('.web-slideshow') || imgSrc.includes('w1.webp') || imgSrc.includes('n1.webp') || imgSrc.includes('b1.webp') || imgSrc.includes('yemen.webp') || imgSrc.includes('q1.webp') || imgSrc.includes('t1.webp');
     
     if (isDesignWeb) {
-        // Find the corresponding website URL from gallery data
         const webItem = galleryData['design-web'].items.find(item => imgSrc.includes(item.image.split('/').pop()));
         if (webItem && webItem.websiteUrl) {
             const visitLink = visitBtn.querySelector('a');
@@ -805,8 +854,90 @@ function openImageModal(imgElement) {
     // Show modal
     modal.classList.add('show');
     document.body.style.overflow = 'hidden'; // Prevent background scrolling
+}
+
+// Function to get technologies for each project
+function getTechnologiesForProject(projectTitle) {
+    const techMap = {
+        'الحياة في اليونان': ['HTML5', 'CSS3', 'JavaScript', 'Animation'],
+        'TV Player': ['HTML5', 'CSS3', 'JavaScript', 'Video API'],
+        'Work Manager': ['HTML5', 'CSS3', 'JavaScript', 'PHP', 'Database'],
+        'Animation': ['HTML5', 'CSS3', 'JavaScript', 'CSS Animation'],
+        'Data List': ['HTML5', 'CSS3', 'JavaScript', 'Data Management'],
+        'Business Card': ['Photoshop', 'Design', 'Print Ready'],
+        'Menu Card': ['Photoshop', 'Design', 'Print Ready'],
+        'Restaurant Menu': ['Corel Draw', 'Design', 'Print Ready']
+    };
     
-    // Slideshow is now manual only
+    return techMap[projectTitle] || ['Design', 'Creative'];
+}
+
+// Function to get project date
+function getProjectDate(projectTitle) {
+    const dateMap = {
+        'الحياة في اليونان': '2024',
+        'TV Player': '2024',
+        'Work Manager': '2023',
+        'Animation': '2024',
+        'Data List': '2023',
+        'Business Card': '2024',
+        'Menu Card': '2024',
+        'Restaurant Menu': '2023'
+    };
+    
+    return dateMap[projectTitle] || '2024';
+}
+
+// Function to add detailed information to modal
+function addModalDetails(description, technologies, projectDate) {
+    const modalCaption = document.querySelector('.modal-caption');
+    
+    // Remove existing details if any
+    const existingDetails = modalCaption.querySelector('.modal-details');
+    if (existingDetails) {
+        existingDetails.remove();
+    }
+    
+    // Create details container
+    const detailsContainer = document.createElement('div');
+    detailsContainer.className = 'modal-details';
+    
+    // Add description if available
+    if (description && description.trim() !== '') {
+        const descriptionEl = document.createElement('p');
+        descriptionEl.className = 'modal-description';
+        descriptionEl.textContent = description;
+        detailsContainer.appendChild(descriptionEl);
+    }
+    
+    // Add technologies if available
+    if (technologies && technologies.length > 0) {
+        const techContainer = document.createElement('div');
+        techContainer.className = 'modal-technologies';
+        
+        technologies.forEach(tech => {
+            const techTag = document.createElement('span');
+            techTag.className = 'modal-tech-tag';
+            techTag.textContent = tech;
+            techContainer.appendChild(techTag);
+        });
+        
+        detailsContainer.appendChild(techContainer);
+    }
+    
+    // Add project date if available
+    if (projectDate && projectDate.trim() !== '') {
+        const dateEl = document.createElement('p');
+        dateEl.className = 'modal-date';
+        dateEl.textContent = `Project Date: ${projectDate}`;
+        detailsContainer.appendChild(dateEl);
+    }
+    
+    // Insert details after title row
+    const titleRow = modalCaption.querySelector('.modal-title-row');
+    if (titleRow && detailsContainer.children.length > 0) {
+        titleRow.parentNode.insertBefore(detailsContainer, titleRow.nextSibling);
+    }
 }
 
 function closeImageModal() {
@@ -815,6 +946,12 @@ function closeImageModal() {
     
     // Check if image was opened from gallery
     const fromGallery = modal.dataset.fromGallery === 'true';
+    
+    // Clean up modal details
+    const modalDetails = document.querySelector('.modal-details');
+    if (modalDetails) {
+        modalDetails.remove();
+    }
     
     // Hide modal
     modal.classList.remove('show');
