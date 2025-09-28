@@ -265,28 +265,28 @@
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-            <div class="collapse navbar-collapse" id="navbarColor03">
-              <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                  <a class="nav-link" href="#hero">Home</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#services">Services</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#skills">My Skills</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#work">Design Print</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#Models">Design Web</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#contact">Contact Me</a>
-                </li>
-              </ul>
-            </div>
+          <div class="collapse navbar-collapse" id="navbarColor03">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="#hero">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#services">Services</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#skills">My Skills</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#work">Design Print</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#Models">Design Web</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#contact">Contact Me</a>
+              </li>
+            </ul>
+          </div>
         </div>
     </nav>
 
@@ -787,8 +787,8 @@
                     <div class="toggle-switch">
                         <input type="checkbox" id="darkModeToggle">
                         <span class="toggle-slider"></span>
-                    </div>
-                </label>
+  </div>
+</label>
             </div>
             
             <div class="setting-item">
@@ -896,7 +896,7 @@
         
         // Dark Mode
         if (settings.darkMode) {
-            body.classList.add('dark-theme');
+        body.classList.add('dark-theme');
             darkModeToggle.checked = true;
         }
         
@@ -912,8 +912,10 @@
         }
         
         // Sound Effects
-        if (settings.soundEffects) {
+        if (settings.soundEffects === true) {
             soundToggle.checked = true;
+        } else {
+            soundToggle.checked = false;
         }
     }
 
@@ -960,12 +962,148 @@
     // Auto-scroll Toggle
     autoScrollToggle.addEventListener('change', () => {
         saveSettings();
+        applyAutoScroll();
     });
 
     // Sound Effects Toggle
     soundToggle.addEventListener('change', () => {
         saveSettings();
+        applySoundEffects();
     });
+
+    // Apply Auto-scroll functionality
+    function applyAutoScroll() {
+        const isAutoScrollEnabled = autoScrollToggle.checked;
+        
+        if (isAutoScrollEnabled) {
+            // Enable smooth scrolling for all anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Enable smooth scrolling for back to top button
+            const backToTopBtn = document.getElementById('backToTop');
+            if (backToTopBtn) {
+                backToTopBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+        } else {
+            // Disable smooth scrolling - use default behavior
+            document.querySelectorAll('a[href^="#"]').forEach(link => {
+                link.removeEventListener('click', function(e) {
+                    e.preventDefault();
+                });
+            });
+        }
+    }
+
+    // Apply Sound Effects functionality
+    function applySoundEffects() {
+        const isSoundEnabled = soundToggle.checked;
+        
+        // Create audio context for sound effects
+        let audioContext = null;
+        
+        function initAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+        
+        function playSound(frequency, duration, type = 'sine') {
+            if (!isSoundEnabled) return;
+            
+            try {
+                initAudioContext();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+                oscillator.type = type;
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + duration);
+            } catch (error) {
+                console.log('Sound effects not available');
+            }
+        }
+        
+        // Remove existing event listeners to prevent duplicates
+        const existingListeners = document.querySelectorAll('[data-sound-listener]');
+        existingListeners.forEach(el => el.removeAttribute('data-sound-listener'));
+        
+        // Add sound effects to various interactions only if enabled
+        if (isSoundEnabled) {
+            // Settings button click
+            settingsBtn.addEventListener('click', () => {
+                playSound(800, 0.1);
+            });
+            settingsBtn.setAttribute('data-sound-listener', 'true');
+            
+            // Settings close
+            settingsClose.addEventListener('click', () => {
+                playSound(600, 0.1);
+            });
+            settingsClose.setAttribute('data-sound-listener', 'true');
+            
+            // Toggle switches
+            [darkModeToggle, animationsToggle, autoScrollToggle, soundToggle].forEach(toggle => {
+                toggle.addEventListener('change', () => {
+                    playSound(400, 0.15);
+                });
+                toggle.setAttribute('data-sound-listener', 'true');
+            });
+            
+            // Action buttons
+            resetSettings.addEventListener('click', () => {
+                playSound(300, 0.2);
+            });
+            resetSettings.setAttribute('data-sound-listener', 'true');
+            
+            clearCookies.addEventListener('click', () => {
+                playSound(200, 0.2);
+            });
+            clearCookies.setAttribute('data-sound-listener', 'true');
+            
+            // Image clicks
+            document.querySelectorAll('.slideshow-container img, .web-slideshow img, #work .border-hover img, #Models .border-hover img').forEach(img => {
+                img.addEventListener('click', () => {
+                    playSound(500, 0.1);
+                });
+                img.setAttribute('data-sound-listener', 'true');
+            });
+            
+            // Navigation links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    playSound(700, 0.1);
+                });
+                link.setAttribute('data-sound-listener', 'true');
+            });
+        }
+    }
 
     // Reset Settings
     resetSettings.addEventListener('click', () => {
@@ -999,6 +1137,12 @@
 
     // Load settings on page load
     loadSettings();
+    
+    // Apply functions after settings are loaded
+    setTimeout(() => {
+        applyAutoScroll();
+        applySoundEffects();
+    }, 100);
 
     // Back to Top Button
     const backToTopButton = document.getElementById('backToTop');
