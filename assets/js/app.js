@@ -214,11 +214,9 @@ let resizeTimeout;
 window.addEventListener('resize', function() {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
-        const slideshowContainer = document.querySelector('.slideshow-container');
-        if (slideshowContainer) {
-            // Reload the page to reinitialize slideshow with new layout
-            location.reload();
-        }
+        // Reinitialize slideshow without reloading the page
+        initializeSlideshow();
+        initializeWebSlideshow();
     }, 500);
 });
 
