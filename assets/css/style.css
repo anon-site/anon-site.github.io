@@ -2417,7 +2417,7 @@ footer::before {
 }
 
 .gallery-modal.show {
-    display: block;
+    display: block !important;
 }
 
 /* Gallery Content */

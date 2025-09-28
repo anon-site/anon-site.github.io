@@ -616,6 +616,7 @@ function openGallery(type) {
     });
     
     // Show modal
+    modal.style.display = 'block';
     modal.classList.add('show');
     document.body.style.overflow = 'hidden';
     
@@ -648,6 +649,7 @@ function openImageModalFromGallery(item) {
     // Hide gallery modal instead of closing it completely
     const galleryModal = document.getElementById('galleryModal');
     if (galleryModal) {
+        galleryModal.classList.remove('show');
         galleryModal.style.display = 'none';
     }
     
