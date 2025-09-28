@@ -962,12 +962,12 @@ function getTechnologiesForProject(projectTitle) {
 function getProjectDate(projectTitle) {
     const dateMap = {
         'الحياة في اليونان': '2024',
-        'TV Player': '2024',
+        'TV Player': '2025',
         'Work Manager': '2023',
-        'Animation': '2024',
+        'Animation': '2023',
         'Data List': '2023',
-        'Business Card': '2024',
-        'Menu Card': '2024',
+        'Business Card': '2022',
+        'Menu Card': '2021',
         'Restaurant Menu': '2023'
     };
     
