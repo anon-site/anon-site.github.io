@@ -765,15 +765,81 @@
 <script src="./assets/js/app.js" defer></script>
 <script src="./assets/js/design-web-manager.js" defer></script>
 
-<!-- Dark/Light Mode Toggle Switch -->
-<label class="ui-switch" id="themeSwitchLabel">
-  <input type="checkbox" id="themeSwitch">
-  <div class="slider">
-    <div class="circle"></div>
-  </div>
-</label>
 
-<!-- Back to Top Button -->
+<!-- Settings Floating Button -->
+<div class="settings-container">
+    <button class="settings-btn" id="settingsBtn">
+        <i class="ri-settings-3-line"></i>
+    </button>
+    
+    <div class="settings-menu" id="settingsMenu">
+        <div class="settings-header">
+            <h6>Settings</h6>
+            <button class="settings-close" id="settingsClose">
+                <i class="ri-close-line"></i>
+            </button>
+        </div>
+        
+        <div class="settings-content">
+            <div class="setting-item">
+                <label class="setting-label">
+                    <span>Dark Mode</span>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="darkModeToggle">
+                        <span class="toggle-slider"></span>
+                    </div>
+                </label>
+            </div>
+            
+            <div class="setting-item">
+                <label class="setting-label">
+                    <span>Animations</span>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="animationsToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </div>
+                </label>
+            </div>
+            
+            <div class="setting-item">
+                <label class="setting-label">
+                    <span>Auto-scroll</span>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="autoScrollToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </div>
+                </label>
+            </div>
+            
+            <div class="setting-item">
+                <label class="setting-label">
+                    <span>Sound Effects</span>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="soundToggle">
+                        <span class="toggle-slider"></span>
+                    </div>
+                </label>
+            </div>
+            
+            <div class="setting-divider"></div>
+            
+            <div class="setting-item">
+                <button class="setting-action-btn" id="resetSettings">
+                    <i class="ri-refresh-line"></i>
+                    Reset Settings
+                </button>
+            </div>
+            
+            <div class="setting-item">
+                <button class="setting-action-btn" id="clearCookies">
+                    <i class="ri-delete-bin-line"></i>
+                    Clear Cookies
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <button id="backToTop" class="back-to-top">
     <i class="ri-arrow-up-line"></i>
 </button>
@@ -812,25 +878,127 @@
 </div>
 
 <script>
-    // Theme Toggle Switch
-    const themeSwitch = document.getElementById('themeSwitch');
+    // Settings Floating Button
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsMenu = document.getElementById('settingsMenu');
+    const settingsClose = document.getElementById('settingsClose');
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const animationsToggle = document.getElementById('animationsToggle');
+    const autoScrollToggle = document.getElementById('autoScrollToggle');
+    const soundToggle = document.getElementById('soundToggle');
+    const resetSettings = document.getElementById('resetSettings');
+    const clearCookies = document.getElementById('clearCookies');
     const body = document.body;
-    // Check for saved theme preference
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark-theme') {
-        body.classList.add('dark-theme');
-        themeSwitch.checked = true;
-    } else {
-        body.classList.remove('dark-theme');
-        themeSwitch.checked = false;
+
+    // Load saved settings
+    function loadSettings() {
+        const settings = JSON.parse(localStorage.getItem('siteSettings') || '{}');
+        
+        // Dark Mode
+        if (settings.darkMode) {
+            body.classList.add('dark-theme');
+            darkModeToggle.checked = true;
+        }
+        
+        // Animations
+        if (settings.animations === false) {
+            animationsToggle.checked = false;
+            body.classList.add('no-animations');
+        }
+        
+        // Auto-scroll
+        if (settings.autoScroll === false) {
+            autoScrollToggle.checked = false;
+        }
+        
+        // Sound Effects
+        if (settings.soundEffects) {
+            soundToggle.checked = true;
+        }
     }
 
-    themeSwitch.addEventListener('change', () => {
-        body.classList.toggle('dark-theme');
-        // Save theme preference
-        const currentTheme = body.classList.contains('dark-theme') ? 'dark-theme' : '';
-        localStorage.setItem('theme', currentTheme);
+    // Save settings
+    function saveSettings() {
+        const settings = {
+            darkMode: darkModeToggle.checked,
+            animations: animationsToggle.checked,
+            autoScroll: autoScrollToggle.checked,
+            soundEffects: soundToggle.checked
+        };
+        localStorage.setItem('siteSettings', JSON.stringify(settings));
+    }
+
+    // Toggle settings menu
+    settingsBtn.addEventListener('click', () => {
+        settingsMenu.classList.toggle('show');
     });
+
+    // Close settings menu
+    settingsClose.addEventListener('click', () => {
+        settingsMenu.classList.remove('show');
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!settingsBtn.contains(e.target) && !settingsMenu.contains(e.target)) {
+            settingsMenu.classList.remove('show');
+        }
+    });
+
+    // Dark Mode Toggle
+    darkModeToggle.addEventListener('change', () => {
+        body.classList.toggle('dark-theme');
+        saveSettings();
+    });
+
+    // Animations Toggle
+    animationsToggle.addEventListener('change', () => {
+        body.classList.toggle('no-animations');
+        saveSettings();
+    });
+
+    // Auto-scroll Toggle
+    autoScrollToggle.addEventListener('change', () => {
+        saveSettings();
+    });
+
+    // Sound Effects Toggle
+    soundToggle.addEventListener('change', () => {
+        saveSettings();
+    });
+
+    // Reset Settings
+    resetSettings.addEventListener('click', () => {
+        if (confirm('Are you sure you want to reset all settings?')) {
+            localStorage.removeItem('siteSettings');
+            location.reload();
+        }
+    });
+
+    // Clear Cookies
+    clearCookies.addEventListener('click', () => {
+        if (confirm('Are you sure you want to clear all cookies and local storage data?')) {
+            // Clear localStorage
+            localStorage.clear();
+            
+            // Clear sessionStorage
+            sessionStorage.clear();
+            
+            // Clear cookies (if any)
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+            });
+            
+            // Show success message
+            alert('All cookies and local data have been cleared successfully!');
+            
+            // Reload page to apply changes
+            location.reload();
+        }
+    });
+
+    // Load settings on page load
+    loadSettings();
 
     // Back to Top Button
     const backToTopButton = document.getElementById('backToTop');
