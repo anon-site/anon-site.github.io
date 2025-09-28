@@ -92,6 +92,11 @@ window.onload = function() {
             }, 500 + (index * 200));
         });
     }, 100);
+    
+    // إعادة تهيئة أحداث الصور للتأكد من عملها على الهاتف
+    setTimeout(function() {
+        initializeImageModal();
+    }, 200);
 };
 
 // Close mobile menu after clicking a link
@@ -217,6 +222,8 @@ window.addEventListener('resize', function() {
         // Reinitialize slideshow without reloading the page
         initializeSlideshow();
         initializeWebSlideshow();
+        // Reinitialize image modal events for mobile
+        initializeImageModal();
     }, 500);
 });
 
@@ -638,14 +645,18 @@ function openImageModalFromGallery(item) {
         visitBtn.style.display = 'none';
     }
     
-    // Close gallery modal
-    closeGallery();
+    // Hide gallery modal instead of closing it completely
+    const galleryModal = document.getElementById('galleryModal');
+    if (galleryModal) {
+        galleryModal.style.display = 'none';
+    }
     
     // Show image modal
     modal.classList.add('show');
     document.body.style.overflow = 'hidden';
     
-    // Slideshows are now manual only
+    // Store reference to gallery modal for reopening
+    modal.dataset.fromGallery = 'true';
 }
 
 function closeGallery() {
@@ -653,7 +664,14 @@ function closeGallery() {
     
     // Hide modal
     modal.classList.remove('show');
+    modal.style.display = 'none';
     document.body.style.overflow = '';
+    
+    // Clear any gallery flags from image modal
+    const imageModal = document.getElementById('imageModal');
+    if (imageModal) {
+        imageModal.dataset.fromGallery = 'false';
+    }
     
     // Slideshows are now manual only
 }
@@ -702,27 +720,62 @@ function initializeImageModal() {
     const images = document.querySelectorAll('.slideshow-container img, .web-slideshow img, #work .border-hover img, #Models .border-hover img');
     
     images.forEach(img => {
-        img.addEventListener('click', function() {
-            openImageModal(this);
-        });
+        // Remove any existing event listeners to prevent duplicates
+        img.removeEventListener('click', handleImageClick);
+        img.removeEventListener('touchstart', handleImageClick);
+        
+        // Add both click and touchstart events for better mobile support
+        img.addEventListener('click', handleImageClick);
+        img.addEventListener('touchstart', handleImageClick);
+        
+        // Add visual feedback for mobile
+        img.style.cursor = 'pointer';
+        img.style.userSelect = 'none';
+        img.style.webkitUserSelect = 'none';
+        img.style.webkitTouchCallout = 'none';
     });
     
     // Close modal when clicking close button
-    modalClose.addEventListener('click', closeImageModal);
+    if (modalClose) {
+        modalClose.addEventListener('click', closeImageModal);
+    }
     
     // Close modal when clicking outside the image
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-            closeImageModal();
-        }
-    });
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeImageModal();
+            }
+        });
+    }
     
     // Close modal with Escape key
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && modal.classList.contains('show')) {
-            closeImageModal();
+        if (e.key === 'Escape') {
+            if (modal && modal.classList.contains('show')) {
+                closeImageModal();
+            } else {
+                // Check if gallery is open and close it
+                const galleryModal = document.getElementById('galleryModal');
+                if (galleryModal && galleryModal.classList.contains('show')) {
+                    closeGallery();
+                }
+            }
         }
     });
+}
+
+// Separate function to handle image clicks
+function handleImageClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Prevent double-tap zoom on mobile
+    if (e.type === 'touchstart') {
+        e.preventDefault();
+    }
+    
+    openImageModal(this);
 }
 
 function openImageModal(imgElement) {
@@ -791,12 +844,26 @@ function closeImageModal() {
     const modal = document.getElementById('imageModal');
     const visitBtn = document.getElementById('visitWebsiteBtn');
     
+    // Check if image was opened from gallery
+    const fromGallery = modal.dataset.fromGallery === 'true';
+    
     // Hide modal
     modal.classList.remove('show');
     document.body.style.overflow = ''; // Restore scrolling
     
     // Hide visit button
     visitBtn.style.display = 'none';
+    
+    // If opened from gallery, reopen gallery modal
+    if (fromGallery) {
+        const galleryModal = document.getElementById('galleryModal');
+        if (galleryModal) {
+            galleryModal.style.display = 'block';
+            galleryModal.classList.add('show');
+        }
+        // Clear the flag
+        modal.dataset.fromGallery = 'false';
+    }
     
     // Slideshow is now manual only
 }
