@@ -183,26 +183,11 @@ fetch('https://api.ipify.org?format=json')
 let currentSlideIndex = 0;
 let currentWebSlideIndex = 0;
 
-// Enhanced Animation types for slideshow with smooth transitions
+// Simplified Animation types for slideshow - only practical animations
 const animationTypes = [
-    'slide-slide-left',
-    'slide-slide-right', 
-    'slide-slide-up',
-    'slide-slide-down',
-    'slide-scale',
-    'slide-rotate',
-    'slide-flip',
-    'slide-zoom',
     'slide-fade',
-    'slide-bounce',
-    'slide-elastic',
-    'slide-spiral',
-    'slide-wave',
-    'slide-cube',
-    'slide-card-flip',
-    'slide-morph',
-    'slide-glide',
-    'slide-float'
+    'slide-slide-left',
+    'slide-slide-right'
 ];
 
 let currentAnimationType = 0;
@@ -310,24 +295,19 @@ function showSlide(index) {
     if (index >= slides.length) index = 0;
     if (index < 0) index = slides.length - 1;
     
-    // Remove all animation classes and active class
+    // Hide all slides
     slides.forEach(slide => {
         slide.classList.remove('active');
-        animationTypes.forEach(type => slide.classList.remove(type));
     });
     dots.forEach(dot => dot.classList.remove('active'));
     
-    // Show current slide with animation
+    // Show current slide with simple fade animation
     currentSlideIndex = index;
     const currentSlide = slides[currentSlideIndex];
-    const animationType = animationTypes[currentAnimationType];
     
-    currentSlide.classList.add(animationType);
+    currentSlide.classList.add('slide-fade');
     currentSlide.classList.add('active');
     dots[currentSlideIndex].classList.add('active');
-    
-    // Change animation type for next slide
-    currentAnimationType = (currentAnimationType + 1) % animationTypes.length;
 }
 
 function changeSlide(direction) {
@@ -434,24 +414,19 @@ function showWebSlide(index) {
     if (index >= slides.length) index = 0;
     if (index < 0) index = slides.length - 1;
     
-    // Remove all animation classes and active class
+    // Hide all slides
     slides.forEach(slide => {
         slide.classList.remove('active');
-        animationTypes.forEach(type => slide.classList.remove(type));
     });
     dots.forEach(dot => dot.classList.remove('active'));
     
-    // Show current slide with animation
+    // Show current slide with simple fade animation
     currentWebSlideIndex = index;
     const currentSlide = slides[currentWebSlideIndex];
-    const animationType = animationTypes[currentWebAnimationType];
     
-    currentSlide.classList.add(animationType);
+    currentSlide.classList.add('slide-fade');
     currentSlide.classList.add('active');
     dots[currentWebSlideIndex].classList.add('active');
-    
-    // Change animation type for next slide
-    currentWebAnimationType = (currentWebAnimationType + 1) % animationTypes.length;
 }
 
 function changeWebSlide(direction) {
