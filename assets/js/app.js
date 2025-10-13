@@ -520,12 +520,12 @@ const galleryData = {
                 websiteUrl: 'https://anon-site.github.io/noon.tv'
             },
             {
-                image: './assets/images/b1.webp',
-                title: 'Work Manager',
-                badge: 'Data Entry',
+                image: './assets/images/IslamTime.webp',
+                title: 'Islam Time',
+                badge: 'Islamic App',
                 badgeClass: 'bg-info',
-                description: 'Advanced work management system with comprehensive database and easy interface',
-                websiteUrl: 'https://anon-site.github.io/Work-Manager/'
+                description: 'Islamic prayer times app with Hijri calendar, Quran, supplications, and customizable settings for Muslims worldwide',
+                websiteUrl: 'https://anon-site.github.io/Islam/'
             },
             {
                 image: './assets/images/w1.webp',
@@ -542,6 +542,14 @@ const galleryData = {
                 badgeClass: 'bg-info',
                 description: 'Interactive data list with advanced search and filtering capabilities',
                 websiteUrl: 'https://anon-site.github.io/data-table/'
+            },
+            {
+                image: './assets/images/b1.webp',
+                title: 'Work Manager',
+                badge: 'Data Entry',
+                badgeClass: 'bg-info',
+                description: 'Advanced work management system with comprehensive database and easy interface',
+                websiteUrl: 'https://anon-site.github.io/Work-Manager/'
             }
         ]
     }
@@ -874,7 +882,7 @@ function openImageModal(imgElement) {
     }
     
     // Get detailed information from gallery data
-    const isDesignWeb = imgElement.closest('.web-slideshow') || imgSrc.includes('w1.webp') || imgSrc.includes('n1.webp') || imgSrc.includes('b1.webp') || imgSrc.includes('yemen.webp') || imgSrc.includes('q1.webp') || imgSrc.includes('t1.webp');
+    const isDesignWeb = imgElement.closest('.web-slideshow') || imgSrc.includes('w1.webp') || imgSrc.includes('n1.webp') || imgSrc.includes('b1.webp') || imgSrc.includes('yemen.webp') || imgSrc.includes('q1.webp') || imgSrc.includes('t1.webp') || imgSrc.includes('IslamTime.webp');
     
     if (isDesignWeb) {
         const webItem = galleryData['design-web'].items.find(item => imgSrc.includes(item.image.split('/').pop()));
@@ -947,6 +955,7 @@ function getTechnologiesForProject(projectTitle) {
     const techMap = {
         'الحياة في اليونان': ['HTML5', 'CSS3', 'JavaScript', 'Animation'],
         'TV Player': ['HTML5', 'CSS3', 'JavaScript', 'Video API'],
+        'Islam Time': ['HTML5', 'CSS3', 'JavaScript', 'Islamic API', 'Geolocation'],
         'Work Manager': ['HTML5', 'CSS3', 'JavaScript', 'PHP', 'Database'],
         'Animation': ['HTML5', 'CSS3', 'JavaScript', 'CSS Animation'],
         'Data List': ['HTML5', 'CSS3', 'JavaScript', 'Data Management'],
@@ -963,6 +972,7 @@ function getProjectDate(projectTitle) {
     const dateMap = {
         'الحياة في اليونان': '2024',
         'TV Player': '2025',
+        'Islam Time': '2025',
         'Work Manager': '2023',
         'Animation': '2023',
         'Data List': '2023',
