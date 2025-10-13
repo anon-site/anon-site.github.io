@@ -1,8 +1,29 @@
 // Navbar scroll effects removed - navbar is now always visible
 
-// AOS
+// Performance detection for low-end devices
+const isLowEndDevice = () => {
+    // Check for reduced motion preference
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return true;
+    }
+    // Check device memory (if available)
+    if (navigator.deviceMemory && navigator.deviceMemory < 4) {
+        return true;
+    }
+    // Check hardware concurrency (CPU cores)
+    if (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4) {
+        return true;
+    }
+    return false;
+};
+
+// AOS - with performance optimization
+const lowEnd = isLowEndDevice();
 AOS.init({
-    duration: 700
+    duration: lowEnd ? 400 : 700,
+    once: true, // Animation happens only once
+    disable: lowEnd ? 'mobile' : false, // Disable on mobile for low-end devices
+    throttleDelay: 100 // Throttle for better performance
 });
 
 var TxtType = function(el, toRotate, period) {
@@ -199,18 +220,34 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeWebSlideshow();
 });
 
-// Reinitialize slideshow on window resize
-let resizeTimeout;
-window.addEventListener('resize', function() {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-        // Reinitialize slideshow without reloading the page
-        initializeSlideshow();
-        initializeWebSlideshow();
-        // Reinitialize image modal events for mobile
-        initializeImageModal();
-    }, 500);
-});
+// Debounce function for better performance
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Reinitialize slideshow on window resize - with debounce
+const handleResize = debounce(() => {
+    // Skip reinitialize on low-end devices to save performance
+    if (lowEnd && window.innerWidth > 768) {
+        return;
+    }
+    
+    // Reinitialize slideshow without reloading the page
+    initializeSlideshow();
+    initializeWebSlideshow();
+    // Reinitialize image modal events for mobile
+    initializeImageModal();
+}, 300);
+
+window.addEventListener('resize', handleResize, { passive: true });
 
 function initializeSlideshow() {
     const slideshowContainer = document.querySelector('.slideshow-container');
@@ -597,8 +634,20 @@ function openGallery(type) {
         `;
         
         // Add click event to open image modal
-        galleryItem.addEventListener('click', () => {
+        galleryItem.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Gallery item clicked:', item.title);
             openImageModalFromGallery(item);
+        });
+        
+        // Add keyboard support
+        galleryItem.setAttribute('tabindex', '0');
+        galleryItem.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openImageModalFromGallery(item);
+            }
         });
         
         grid.appendChild(galleryItem);
@@ -618,6 +667,12 @@ function openImageModalFromGallery(item) {
     const modalTitle = document.getElementById('modalTitle');
     const modalBadge = document.getElementById('modalBadge');
     const visitBtn = document.getElementById('visitWebsiteBtn');
+    
+    // Check if modal elements exist
+    if (!modal || !modalImage || !modalTitle || !modalBadge || !visitBtn) {
+        console.error('Modal elements not found!');
+        return;
+    }
     
     // Set modal content
     modalImage.src = item.image;
@@ -669,7 +724,10 @@ function openImageModalFromGallery(item) {
         galleryModal.style.display = 'none';
     }
     
-    // Show image modal
+    // Show image modal with smooth animation
+    modal.style.display = 'flex';
+    // Force reflow for animation
+    modal.offsetHeight;
     modal.classList.add('show');
     document.body.style.overflow = 'hidden';
     
@@ -945,7 +1003,10 @@ function openImageModal(imgElement) {
         visitBtn.style.display = 'none';
     }
     
-    // Show modal
+    // Show modal with smooth animation
+    modal.style.display = 'flex';
+    // Force reflow for animation
+    modal.offsetHeight;
     modal.classList.add('show');
     document.body.style.overflow = 'hidden'; // Prevent background scrolling
 }
@@ -1039,33 +1100,46 @@ function addModalDetails(description, technologies, projectDate) {
 function closeImageModal() {
     const modal = document.getElementById('imageModal');
     const visitBtn = document.getElementById('visitWebsiteBtn');
+    const modalContent = modal.querySelector('.modal-content');
     
     // Check if image was opened from gallery
     const fromGallery = modal.dataset.fromGallery === 'true';
     
-    // Clean up modal details
-    const modalDetails = document.querySelector('.modal-details');
-    if (modalDetails) {
-        modalDetails.remove();
+    // Add closing animation
+    if (modalContent) {
+        modalContent.style.animation = 'modalSlideOut 0.3s ease forwards';
     }
+    modal.style.animation = 'modalFadeOut 0.3s ease forwards';
     
-    // Hide modal
-    modal.classList.remove('show');
-    document.body.style.overflow = ''; // Restore scrolling
-    
-    // Hide visit button
-    visitBtn.style.display = 'none';
-    
-    // If opened from gallery, reopen gallery modal
-    if (fromGallery) {
-        const galleryModal = document.getElementById('galleryModal');
-        if (galleryModal) {
-            galleryModal.style.display = 'block';
-            galleryModal.classList.add('show');
+    // Wait for animation to complete before hiding
+    setTimeout(() => {
+        // Clean up modal details
+        const modalDetails = document.querySelector('.modal-details');
+        if (modalDetails) {
+            modalDetails.remove();
         }
-        // Clear the flag
-        modal.dataset.fromGallery = 'false';
-    }
-    
-    // Slideshow is now manual only
+        
+        // Hide modal
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+        modal.style.animation = '';
+        if (modalContent) {
+            modalContent.style.animation = '';
+        }
+        document.body.style.overflow = ''; // Restore scrolling
+        
+        // Hide visit button
+        visitBtn.style.display = 'none';
+        
+        // If opened from gallery, reopen gallery modal
+        if (fromGallery) {
+            const galleryModal = document.getElementById('galleryModal');
+            if (galleryModal) {
+                galleryModal.style.display = 'block';
+                galleryModal.classList.add('show');
+            }
+            // Clear the flag
+            modal.dataset.fromGallery = 'false';
+        }
+    }, 300);
 }
