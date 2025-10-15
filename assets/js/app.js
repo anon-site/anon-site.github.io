@@ -378,4 +378,235 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    
+    // Image Modal for Design Print and Design Web sections
+    initializeImageModals();
 });
+
+// Image Modal Functionality
+function initializeImageModals() {
+    // Project data with all information
+    const projectsData = {
+        // Design Print Projects
+        'project-01.webp': {
+            title: 'Business Card',
+            description: 'Modern and elegant business card design with clean layout, perfect for creating a professional first impression for your brand.',
+            technologies: ['Photoshop', 'Print Design', 'Professional'],
+            date: '2022',
+            badge: { text: 'Photoshop', class: 'bg-info' }
+        },
+        'project-02.webp': {
+            title: 'Business Card',
+            description: 'Creative business card featuring unique typography and color scheme, designed to stand out and leave a lasting impression.',
+            technologies: ['Photoshop', 'Creative', 'Premium'],
+            date: '2022',
+            badge: { text: 'Photoshop', class: 'bg-info' }
+        },
+        'project-03.webp': {
+            title: 'Business Card',
+            description: 'Minimalist business card design with focus on simplicity and readability, ideal for modern corporate branding.',
+            technologies: ['Photoshop', 'Minimalist', 'Corporate'],
+            date: '2023',
+            badge: { text: 'Photoshop', class: 'bg-info' }
+        },
+        'project-04.webp': {
+            title: 'Business Card',
+            description: 'Elegant and luxurious business card design with sophisticated styling, perfect for high-end businesses and executives.',
+            technologies: ['Photoshop', 'Elegant', 'Luxury'],
+            date: '2023',
+            badge: { text: 'Photoshop', class: 'bg-info' }
+        },
+        'project-05.webp': {
+            title: 'Menu Card',
+            description: 'Attractive menu card design with organized layout and appetizing presentation, perfect for cafes and restaurants.',
+            technologies: ['Photoshop', 'Menu Design', 'Food & Beverage'],
+            date: '2021',
+            badge: { text: 'Photoshop', class: 'bg-info' }
+        },
+        'project-06.webp': {
+            title: 'Restaurant Menu',
+            description: 'Comprehensive restaurant menu design with detailed sections and beautiful graphics, optimized for print quality.',
+            technologies: ['Corel Draw', 'Restaurant', 'Full Menu'],
+            date: '2023',
+            badge: { text: 'Corel Draw', class: 'bg-danger' }
+        },
+        // Design Web Projects
+        'yemen.webp': {
+            title: 'Life in Greece',
+            description: 'Comprehensive guide about living in Greece, featuring cultural insights, practical information, and beautiful animations for an engaging user experience.',
+            technologies: ['Animation', 'CSS3', 'JavaScript'],
+            date: '2024',
+            badge: { text: 'Animation', class: 'bg-info' },
+            websiteUrl: 'https://anon-site.github.io/greece/'
+        },
+        'q1.webp': {
+            title: 'TV Player',
+            description: 'Modern streaming platform with intuitive interface, supporting multiple video formats and providing seamless viewing experience across all devices.',
+            technologies: ['Streaming', 'HTML5', 'Responsive'],
+            date: '2025',
+            badge: { text: 'Streaming', class: 'bg-danger' },
+            websiteUrl: 'https://anon-site.github.io/noon.tv'
+        },
+        'IslamTime.webp': {
+            title: 'Islam Time',
+            description: 'Islamic prayer times application with accurate location-based calculations, Quranic verses, and Islamic calendar features for Muslim community.',
+            technologies: ['Islamic', 'API', 'Real-time'],
+            date: '2025',
+            badge: { text: 'Islamic App', class: 'bg-success' },
+            websiteUrl: 'https://anon-site.github.io/Islam/'
+        },
+        'b1.webp': {
+            title: 'Work Manager',
+            description: 'Professional task management system with employee tracking, project organization, and data entry capabilities for efficient workplace productivity.',
+            technologies: ['Management', 'Bootstrap', 'CRUD'],
+            date: '2023',
+            badge: { text: 'Data Entry', class: 'bg-primary' },
+            websiteUrl: 'https://anon-site.github.io/Work-Manager/'
+        },
+        'AI Tools Hub.webp': {
+            title: 'AI Tools Hub',
+            description: 'Comprehensive collection of AI tools and resources, featuring cutting-edge artificial intelligence applications for various professional needs.',
+            technologies: ['AI Tools', 'Modern', 'Interactive'],
+            date: '2025',
+            badge: { text: 'AI Tools', class: 'bg-gradient bg-purple' },
+            websiteUrl: 'https://anon-site.github.io/ai-tools/'
+        }
+    };
+    
+    // Create modal if it doesn't exist
+    if (!document.getElementById('imageModal')) {
+        const modalHTML = `
+            <div id="imageModal" class="image-modal">
+                <span class="modal-close" onclick="closeImageModal()">&times;</span>
+                <div class="modal-content">
+                    <img id="modalImage" src="" alt="">
+                    <div class="modal-caption">
+                        <div class="modal-title-row">
+                            <h5 id="modalTitle"></h5>
+                            <span id="modalBadge" class="badge"></span>
+                        </div>
+                        <div class="modal-details">
+                            <p id="modalDescription" class="modal-description"></p>
+                            <div id="modalTechnologies" class="modal-technologies"></div>
+                            <p id="modalDate" class="modal-date"></p>
+                            <div id="modalVisitBtn" class="visit-website-btn" style="display: none;">
+                                <a href="#" target="_blank" rel="noopener noreferrer" class="visit-link">
+                                    <i class="ri-external-link-line"></i>
+                                    <span>Visit Website</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+    }
+    
+    // Add click event to all images in Design Print and Design Web sections
+    const sections = ['#work', '#Models'];
+    sections.forEach(sectionId => {
+        const images = document.querySelectorAll(`${sectionId} .border-hover img`);
+        images.forEach(img => {
+            img.style.cursor = 'pointer';
+            img.addEventListener('click', function() {
+                const imgSrc = this.getAttribute('src');
+                const fileName = imgSrc.split('/').pop();
+                const projectData = projectsData[fileName];
+                
+                if (projectData) {
+                    openImageModal(imgSrc, projectData);
+                }
+            });
+        });
+    });
+    
+    // Close modal on Esc key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeImageModal();
+        }
+    });
+    
+    // Close modal on background click
+    const imageModal = document.getElementById('imageModal');
+    if (imageModal) {
+        imageModal.addEventListener('click', function(e) {
+            if (e.target === imageModal) {
+                closeImageModal();
+            }
+        });
+    }
+}
+
+function openImageModal(imageSrc, data) {
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBadge = document.getElementById('modalBadge');
+    const modalDescription = document.getElementById('modalDescription');
+    const modalTechnologies = document.getElementById('modalTechnologies');
+    const modalDate = document.getElementById('modalDate');
+    const modalVisitBtn = document.getElementById('modalVisitBtn');
+    
+    if (!modal) return;
+    
+    // Set image
+    modalImage.src = imageSrc;
+    modalImage.alt = data.title;
+    
+    // Set title
+    modalTitle.textContent = data.title;
+    
+    // Set badge
+    modalBadge.textContent = data.badge.text;
+    modalBadge.className = `badge ${data.badge.class}`;
+    
+    // Set description
+    modalDescription.textContent = data.description;
+    
+    // Set technologies
+    modalTechnologies.innerHTML = data.technologies.map(tech => 
+        `<span class="modal-tech-tag">${tech}</span>`
+    ).join('');
+    
+    // Set date
+    modalDate.textContent = `Project Date: ${data.date}`;
+    
+    // Set visit website button
+    if (data.websiteUrl) {
+        modalVisitBtn.style.display = 'inline-block';
+        const visitLink = modalVisitBtn.querySelector('a, .visit-link');
+        if (visitLink) {
+            visitLink.href = data.websiteUrl;
+            // Ensure it opens in new tab
+            visitLink.setAttribute('target', '_blank');
+            visitLink.setAttribute('rel', 'noopener noreferrer');
+            
+            // Remove old event listeners and add new one
+            const newVisitLink = visitLink.cloneNode(true);
+            visitLink.parentNode.replaceChild(newVisitLink, visitLink);
+            
+            // Add click event
+            newVisitLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                window.open(data.websiteUrl, '_blank', 'noopener,noreferrer');
+            });
+        }
+    } else {
+        modalVisitBtn.style.display = 'none';
+    }
+    
+    // Show modal
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeImageModal() {
+    const modal = document.getElementById('imageModal');
+    if (modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+}
