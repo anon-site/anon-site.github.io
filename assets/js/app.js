@@ -559,6 +559,9 @@ function openImageModal(imageSrc, data) {
     
     if (!modal) return;
     
+    // Set background image
+    modal.style.backgroundImage = `url('${imageSrc}')`;
+    
     // Set image
     modalImage.src = imageSrc;
     modalImage.alt = data.title;
@@ -615,6 +618,7 @@ function closeImageModal() {
     const modal = document.getElementById('imageModal');
     if (modal) {
         modal.classList.remove('show');
+        modal.style.backgroundImage = ''; // Clear background image
         document.body.style.overflow = '';
     }
 }
