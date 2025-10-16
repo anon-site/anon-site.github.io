@@ -2709,11 +2709,13 @@ footer {
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
     padding: 15px;
-    transition: transform 0.3s ease;
+    transition: transform 0.1s ease-out;
+    cursor: zoom-in;
+    transform-origin: center center;
 }
 
 .modal-content img:hover {
-    transform: scale(1.01);
+    transform: scale(1.5);
 }
 
 /* Modal Caption - Right Side */
@@ -2876,14 +2878,14 @@ footer {
 .visit-website-btn .visit-link {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
     background: #0dcaf0;
     color: white;
     text-decoration: none;
-    padding: 8px 18px;
-    border-radius: 20px;
+    padding: 6px 14px;
+    border-radius: 18px;
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     transition: all 0.3s ease;
     border: 2px solid #0dcaf0;
     box-shadow: 0 3px 10px rgba(13, 202, 240, 0.3);
@@ -2910,7 +2912,7 @@ footer {
 
 .visit-website-btn a i,
 .visit-website-btn .visit-link i {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     transition: all 0.3s ease;
 }
 
@@ -3045,6 +3047,10 @@ footer {
     box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8),
                 0 0 1px rgba(13, 202, 240, 0.3),
                 inset 0 1px 0 rgba(13, 202, 240, 0.1);
+}
+
+.dark-theme .modal-content img {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
 }
 
 .dark-theme .modal-caption {

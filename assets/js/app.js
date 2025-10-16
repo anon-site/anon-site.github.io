@@ -612,6 +612,18 @@ function openImageModal(imageSrc, data) {
     // Show modal
     modal.classList.add('show');
     document.body.style.overflow = 'hidden';
+    
+    // Add zoom effect that follows mouse movement
+    modalImage.addEventListener('mousemove', function(e) {
+        const rect = this.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        this.style.transformOrigin = `${x}% ${y}%`;
+    });
+    
+    modalImage.addEventListener('mouseleave', function() {
+        this.style.transformOrigin = 'center center';
+    });
 }
 
 function closeImageModal() {
