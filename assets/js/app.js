@@ -470,6 +470,14 @@ function initializeImageModals() {
             date: '2025',
             badge: { text: 'AI Tools', class: 'bg-gradient bg-purple' },
             websiteUrl: 'https://anon-site.github.io/ai-tools/'
+        },
+        'falconx.webp': {
+            title: 'Falcon X',
+            description: 'Advanced software solutions for Windows, Android, and FRP tools. Professional desktop applications and powerful mobile apps for various technical needs.',
+            technologies: ['Windows', 'Android', 'FRP Tools'],
+            date: '2025',
+            badge: { text: 'Software Solutions', class: 'bg-primary' },
+            websiteUrl: 'https://anon-site.github.io/falcon.x'
         }
     };
     
