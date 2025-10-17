@@ -93,6 +93,26 @@ a {
     background: linear-gradient(90deg, transparent, #0dcaf0, transparent);
 }
 
+/* Light mode text improvements for better readability */
+.text-muted.small {
+    color: #495057 !important;
+    font-weight: 500;
+}
+
+#work .border-hover p,
+#Models .border-hover p {
+    color: #495057 !important;
+    font-weight: 500;
+}
+
+/* Dark theme keeps lighter text */
+.dark-theme .text-muted.small,
+.dark-theme #work .border-hover p,
+.dark-theme #Models .border-hover p {
+    color: #adb5bd !important;
+    font-weight: 400;
+}
+
 /* Enhanced Navbar Styles - Fixed visibility */
 .navbar {
     padding: 1rem 0;
