@@ -111,6 +111,8 @@ window.onload = function () {
     }, 100);
 };
 
+
+
 // Close mobile menu after clicking a link
 document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
     link.addEventListener('click', () => {
@@ -635,3 +637,14 @@ function closeImageModal() {
         document.body.style.overflow = '';
     }
 }
+
+// Navbar Scroll Effect
+window.addEventListener('scroll', function () {
+    const navbar = document.querySelector('.navbar');
+    if (!navbar) return;
+    if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+    } else {
+        navbar.classList.remove('scrolled');
+    }
+});

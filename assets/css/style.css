@@ -97,6 +97,50 @@ a {
 }
 
 /* Light mode text improvements for better readability */
+/* Hero Image Animations */
+@keyframes heroReveal {
+    0% {
+        opacity: 0;
+        transform: perspective(1000px) rotateX(10deg) translateY(50px) scale(0.8);
+        filter: blur(10px) brightness(0.5);
+    }
+
+    100% {
+        opacity: 1;
+        transform: perspective(1000px) rotateX(0) translateY(0) scale(1);
+        filter: blur(0) brightness(1);
+    }
+}
+
+@keyframes heroFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+.hero-animated {
+    opacity: 0;
+    /* Start hidden */
+    animation:
+        heroReveal 1.2s cubic-bezier(0.215, 0.610, 0.355, 1.000) 0.5s forwards,
+        heroFloat 5s ease-in-out 1.7s infinite;
+    /* Float starts after reveal */
+    transition: all 0.5s ease;
+    will-change: transform, opacity;
+}
+
+.hero-animated:hover {
+    transform: scale(1.03) translateY(-5px) !important;
+    /* Pause float on hover and lift slightly */
+    filter: drop-shadow(0 20px 30px rgba(13, 202, 240, 0.3));
+}
+
 .text-muted.small {
     color: #495057 !important;
     font-weight: 500;
@@ -116,19 +160,82 @@ a {
     font-weight: 400;
 }
 
+/* Navbar Entry Animation */
+@keyframes navbarEntry {
+    0% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
 /* Enhanced Navbar Styles - Fixed visibility */
 .navbar {
-    padding: 1rem 0;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-    will-change: transform;
+    padding: 1.2rem 0;
+    /* Default larger padding */
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    box-shadow: none;
+    /* No shadow initially */
+    background-color: transparent !important;
+    /* Force transparent initially */
+    transition: all 0.4s ease;
+
+    /* Entry Animation Settings */
+    transform: translateY(-100%);
+    /* Start hidden above screen */
+    opacity: 0;
+    animation: navbarEntry 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.8s forwards;
+    /* Slide down after 0.8s delay */
+}
+
+.navbar.scrolled {
+    padding: 0.8rem 0;
+    /* Shrink padding on scroll */
+    background-color: rgba(255, 255, 255, 0.85) !important;
+    /* Glassy background */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    /* Add shadow on scroll */
+}
+
+/* Dark theme specific override for scrolled state */
+.dark-theme .navbar.scrolled {
+    background-color: rgba(26, 26, 26, 0.85) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Logo Reveal Animation */
+@keyframes logoReveal {
+    0% {
+        opacity: 0;
+        transform: scale(1.2);
+        filter: blur(10px);
+        letter-spacing: 5px;
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+        letter-spacing: 1px;
+    }
 }
 
 .navbar .navbar-brand {
     font-weight: 700;
     letter-spacing: 1px;
-    transition: all 0.3s ease;
+    transition: all 0.3s easebox;
+
+    /* Initial state for animation */
+    opacity: 0;
+    animation: logoReveal 1s cubic-bezier(0.215, 0.610, 0.355, 1.000) 1.4s forwards;
+    /* Starts after navbar is mostly visible */
 }
 
 .navbar .navbar-brand:hover {
@@ -244,8 +351,9 @@ a {
 
 /* Dark Mode Navbar Adjustments */
 .dark-theme .navbar {
-    background-color: rgba(26, 26, 26, 0.95) !important;
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+    background-color: transparent !important;
+    /* Start transparent */
+    box-shadow: none;
 }
 
 .dark-theme .navbar .navbar-brand,
@@ -293,9 +401,8 @@ a {
 }
 
 /* Light Mode Navbar Adjustments */
-.navbar {
-    background-color: rgba(255, 255, 255, 0.95) !important;
-}
+/* Light Mode Navbar Adjustments - Now handled by .navbar.scrolled */
+/* .navbar { background-color: rgba(255, 255, 255, 0.95) !important; } */
 
 .navbar .navbar-brand,
 .navbar .nav-link {
