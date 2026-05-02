@@ -337,8 +337,9 @@
     </nav>
 
     <!-- Hero -->
-    <div id="hero" class="section-padding divider">
-        <div class="container">
+    <div id="hero" class="section-padding divider hero-section">
+        <div class="hero-bg-pattern"></div>
+        <div class="container position-relative" style="z-index: 2;">
             <div class="row gy-4 align-items-center">
                 <div class="col-lg-5">
                     <img src="./assets/images/hero.webp" class="img-fluid hero-animated"
@@ -362,6 +363,24 @@
                 </div>
             </div>
         </div>
+
+        <!-- Animated Waves -->
+        <div class="hero-waves">
+            <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
+                <defs>
+                    <path id="wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"/>
+                </defs>
+                <g class="wave-parallax">
+                    <use href="#wave" x="48" y="0" fill="rgba(13, 202, 240, 0.1)"/>
+                    <use href="#wave" x="48" y="3" fill="rgba(91, 98, 244, 0.15)"/>
+                    <use href="#wave" x="48" y="5" fill="rgba(13, 202, 240, 0.2)"/>
+                    <use href="#wave" x="48" y="7" fill="rgba(255, 255, 255, 0.3)"/>
+                </g>
+            </svg>
+        </div>
+
+        <!-- Bottom Gradient Fade -->
+        <div class="hero-bottom-fade"></div>
     </div>
 
     <!-- Services -->
