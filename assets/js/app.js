@@ -633,3 +633,265 @@ window.addEventListener('scroll', function () {
         navbar.classList.remove('scrolled');
     }
 });
+
+// Animated Strings Canvas Effect
+(function() {
+    const canvas = document.getElementById('strings-canvas');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+    let animationId;
+    let isActive = true;
+
+    // Mouse tracking
+    let mouse = { x: null, y: null, radius: 200 };
+    let isMouseInHero = false;
+
+    // Check for low-end devices
+    const isLowEnd = isLowEndDevice();
+
+    // Configuration
+    const config = {
+        particleCount: isLowEnd ? 25 : 45,
+        connectionDistance: 150,
+        moveSpeed: 0.5,
+        lineOpacity: 0.15,
+        particleSize: 2,
+        mouseConnectionDistance: 200,
+        mouseAttractionForce: 0.02
+    };
+
+    // Colors for light/dark themes
+    function getColors() {
+        const isDark = document.body.classList.contains('dark-theme');
+        return {
+            line: isDark ? '150, 220, 255' : '13, 202, 240',
+            particle: isDark ? '0, 212, 255' : '13, 202, 240',
+            mouseLine: isDark ? '0, 212, 255' : '13, 202, 240'
+        };
+    }
+
+    // Resize canvas
+    function resize() {
+        width = canvas.width = canvas.offsetWidth;
+        height = canvas.height = canvas.offsetHeight;
+    }
+
+    // Particle class
+    class Particle {
+        constructor() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.vx = (Math.random() - 0.5) * config.moveSpeed;
+            this.vy = (Math.random() - 0.5) * config.moveSpeed;
+            this.baseX = this.x;
+            this.baseY = this.y;
+            this.size = Math.random() * 1.5 + 1;
+        }
+
+        update() {
+            // Normal movement
+            this.x += this.vx;
+            this.y += this.vy;
+
+            // Bounce off edges
+            if (this.x < 0 || this.x > width) this.vx *= -1;
+            if (this.y < 0 || this.y > height) this.vy *= -1;
+
+            // Mouse interaction - attraction towards mouse
+            if (isMouseInHero && mouse.x !== null && mouse.y !== null) {
+                const dx = mouse.x - this.x;
+                const dy = mouse.y - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < mouse.radius) {
+                    const forceDirectionX = dx / distance;
+                    const forceDirectionY = dy / distance;
+                    const force = (mouse.radius - distance) / mouse.radius;
+                    const directionX = forceDirectionX * force * config.mouseAttractionForce * 5;
+                    const directionY = forceDirectionY * force * config.mouseAttractionForce * 5;
+
+                    this.vx += directionX;
+                    this.vy += directionY;
+                }
+            }
+
+            // Speed limiting
+            const maxSpeed = 2;
+            const currentSpeed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+            if (currentSpeed > maxSpeed) {
+                this.vx = (this.vx / currentSpeed) * maxSpeed;
+                this.vy = (this.vy / currentSpeed) * maxSpeed;
+            }
+
+            // Return to base speed gradually
+            this.vx *= 0.99;
+            this.vy *= 0.99;
+
+            // Add slight random movement
+            this.vx += (Math.random() - 0.5) * 0.02;
+            this.vy += (Math.random() - 0.5) * 0.02;
+        }
+
+        draw() {
+            const colors = getColors();
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${colors.particle}, 0.6)`;
+            ctx.fill();
+
+            // Glow effect
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = `rgba(${colors.particle}, 0.3)`;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        }
+    }
+
+    // Initialize particles
+    function init() {
+        particles = [];
+        for (let i = 0; i < config.particleCount; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    // Draw connections between particles
+    function drawConnections() {
+        const colors = getColors();
+
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < config.connectionDistance) {
+                    const opacity = (1 - distance / config.connectionDistance) * config.lineOpacity;
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.strokeStyle = `rgba(${colors.line}, ${opacity})`;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+            }
+        }
+    }
+
+    // Draw connections from mouse to particles
+    function drawMouseConnections() {
+        if (!isMouseInHero || mouse.x === null || mouse.y === null) return;
+
+        const colors = getColors();
+
+        particles.forEach(particle => {
+            const dx = mouse.x - particle.x;
+            const dy = mouse.y - particle.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < config.mouseConnectionDistance) {
+                const opacity = (1 - distance / config.mouseConnectionDistance) * 0.4;
+                ctx.beginPath();
+                ctx.moveTo(mouse.x, mouse.y);
+                ctx.lineTo(particle.x, particle.y);
+                ctx.strokeStyle = `rgba(${colors.mouseLine}, ${opacity})`;
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+            }
+        });
+
+        // Draw mouse point glow
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${colors.mouseLine}, 0.8)`;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = `rgba(${colors.mouseLine}, 0.5)`;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+    }
+
+    // Animation loop
+    function animate() {
+        if (!isActive) return;
+
+        ctx.clearRect(0, 0, width, height);
+
+        // Update and draw particles
+        particles.forEach(particle => {
+            particle.update();
+            particle.draw();
+        });
+
+        // Draw connections
+        drawConnections();
+        drawMouseConnections();
+
+        animationId = requestAnimationFrame(animate);
+    }
+
+    // Mouse event handlers
+    function handleMouseMove(e) {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+    }
+
+    function handleMouseEnter() {
+        isMouseInHero = true;
+    }
+
+    function handleMouseLeave() {
+        isMouseInHero = false;
+        mouse.x = null;
+        mouse.y = null;
+    }
+
+    // Visibility check - pause when not visible
+    function handleVisibility() {
+        const hero = document.getElementById('hero');
+        if (!hero) return;
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                isActive = entry.isIntersecting;
+                if (isActive && !animationId) {
+                    animate();
+                } else if (!isActive && animationId) {
+                    cancelAnimationFrame(animationId);
+                    animationId = null;
+                }
+            });
+        }, { threshold: 0.1 });
+
+        observer.observe(hero);
+    }
+
+    // Initialize
+    resize();
+    init();
+    animate();
+    handleVisibility();
+
+    // Handle resize
+    window.addEventListener('resize', () => {
+        resize();
+        init();
+    });
+
+    // Mouse events
+    const hero = document.getElementById('hero');
+    if (hero) {
+        hero.addEventListener('mousemove', handleMouseMove);
+        hero.addEventListener('mouseenter', handleMouseEnter);
+        hero.addEventListener('mouseleave', handleMouseLeave);
+    }
+
+    // Handle theme changes
+    const themeObserver = new MutationObserver(() => {
+        // Colors will update automatically in draw functions
+    });
+    themeObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+})();
