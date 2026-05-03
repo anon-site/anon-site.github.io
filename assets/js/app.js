@@ -895,3 +895,278 @@ window.addEventListener('scroll', function () {
     });
     themeObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 })();
+
+// Bubbles Mouse Interaction - Professional Effect
+(function() {
+    const hero = document.getElementById('hero');
+    const bubbles = document.querySelectorAll('.hero-bubbles .bubble');
+    if (!hero || bubbles.length === 0) return;
+
+    const repulsionRadius = 280;
+    const repulsionForce = 1.5;
+    const connectionDistance = 180;
+
+    let mouseX = null;
+    let mouseY = null;
+    let rafId = null;
+    let isInHero = false;
+
+    // Create SVG container for connection lines
+    const svgContainer = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svgContainer.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+        overflow: visible;
+    `;
+    hero.insertBefore(svgContainer, hero.firstChild);
+
+    // Store bubble states
+    const bubbleStates = new Map();
+
+    function initBubbles() {
+        bubbles.forEach((bubble, index) => {
+            const duration = 10 + Math.random() * 6;
+            const baseSize = parseFloat(bubble.style.width) || 40;
+
+            bubbleStates.set(bubble, {
+                progress: Math.random() * 100,
+                speed: 100 / (duration * 60),
+                offsetX: 0,
+                offsetY: 0,
+                wobble: Math.random() * Math.PI * 2,
+                wobbleSpeed: 0.5 + Math.random() * 0.5,
+                baseSize: baseSize,
+                pulsePhase: Math.random() * Math.PI * 2,
+                rotation: 0,
+                rotationSpeed: (Math.random() - 0.5) * 2,
+                isRepelled: false
+            });
+        });
+    }
+
+    function updateConnections() {
+        // Clear old lines
+        while (svgContainer.firstChild) {
+            svgContainer.removeChild(svgContainer.firstChild);
+        }
+
+        const heroRect = hero.getBoundingClientRect();
+        const positions = [];
+
+        // Get current positions
+        bubbles.forEach(bubble => {
+            const state = bubbleStates.get(bubble);
+            if (!state) return;
+
+            const rect = bubble.getBoundingClientRect();
+            positions.push({
+                x: rect.left - heroRect.left + rect.width / 2,
+                y: rect.top - heroRect.top + rect.height / 2,
+                bubble: bubble,
+                state: state
+            });
+        });
+
+        // Draw connections between nearby bubbles
+        for (let i = 0; i < positions.length; i++) {
+            for (let j = i + 1; j < positions.length; j++) {
+                const dx = positions[i].x - positions[j].x;
+                const dy = positions[i].y - positions[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < connectionDistance) {
+                    const opacity = (1 - distance / connectionDistance) * 0.3;
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', positions[i].x);
+                    line.setAttribute('y1', positions[i].y);
+                    line.setAttribute('x2', positions[j].x);
+                    line.setAttribute('y2', positions[j].y);
+                    line.setAttribute('stroke', `rgba(13, 202, 240, ${opacity})`);
+                    line.setAttribute('stroke-width', '1.5');
+                    line.setAttribute('stroke-linecap', 'round');
+                    svgContainer.appendChild(line);
+                }
+            }
+        }
+
+        // Draw connections to mouse
+        if (isInHero && mouseX !== null && mouseY !== null) {
+            positions.forEach(pos => {
+                const dx = pos.x - mouseX;
+                const dy = pos.y - mouseY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < repulsionRadius) {
+                    const opacity = (1 - distance / repulsionRadius) * 0.5;
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', mouseX);
+                    line.setAttribute('y1', mouseY);
+                    line.setAttribute('x2', pos.x);
+                    line.setAttribute('y2', pos.y);
+                    line.setAttribute('stroke', `rgba(0, 212, 255, ${opacity})`);
+                    line.setAttribute('stroke-width', '2');
+                    line.setAttribute('stroke-linecap', 'round');
+                    svgContainer.appendChild(line);
+                }
+            });
+        }
+    }
+
+    function updateBubbles() {
+        const heroRect = hero.getBoundingClientRect();
+        const heroHeight = heroRect.height;
+        const time = Date.now() / 1000;
+
+        bubbles.forEach(bubble => {
+            const state = bubbleStates.get(bubble);
+            if (!state) return;
+
+            // Update base animation (falling)
+            state.progress += state.speed;
+            if (state.progress > 100) {
+                state.progress = 0;
+                state.wobble = Math.random() * Math.PI * 2;
+            }
+
+            // Calculate base position with enhanced wobble
+            const progressRatio = state.progress / 100;
+            const fallY = progressRatio * (heroHeight + 200);
+            const wobbleX = Math.sin(progressRatio * Math.PI * 3 + state.wobble + time * state.wobbleSpeed) * 25;
+            const wobbleY = Math.cos(progressRatio * Math.PI * 2 + state.wobble) * 10;
+
+            // Calculate repulsion from mouse
+            const bubbleCenterX = wobbleX + state.offsetX;
+            const bubbleCenterY = fallY + state.offsetY;
+
+            let repulsionX = 0;
+            let repulsionY = 0;
+            let isNearMouse = false;
+
+            if (isInHero && mouseX !== null && mouseY !== null) {
+                const dx = bubbleCenterX - mouseX;
+                const dy = bubbleCenterY - mouseY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < repulsionRadius && distance > 0) {
+                    isNearMouse = true;
+                    const force = Math.pow((repulsionRadius - distance) / repulsionRadius, 3);
+                    repulsionX = (dx / distance) * force * repulsionForce * 250;
+                    repulsionY = (dy / distance) * force * repulsionForce * 250;
+                }
+            }
+
+            // Apply repulsion with enhanced smoothing
+            const lerpFactor = isNearMouse ? 0.35 : 0.08;
+            state.offsetX += (repulsionX - state.offsetX) * lerpFactor;
+            state.offsetY += (repulsionY - state.offsetY) * lerpFactor;
+
+            // Update pulse effect
+            state.pulsePhase += 0.05;
+            const pulseScale = 1 + Math.sin(state.pulsePhase) * 0.08;
+
+            // Update rotation
+            if (isNearMouse) {
+                state.rotation += state.rotationSpeed * 2;
+            } else {
+                state.rotation += state.rotationSpeed * 0.2;
+            }
+
+            // Calculate final position
+            const finalX = wobbleX + state.offsetX;
+            const finalY = fallY + state.offsetY + wobbleY;
+
+            // Calculate opacity with fade in/out
+            let opacity = 1;
+            if (state.progress < 8) {
+                opacity = state.progress / 8;
+            } else if (state.progress > 88) {
+                opacity = (100 - state.progress) / 12;
+            }
+
+            // Enhanced glow effect when near mouse
+            if (isNearMouse) {
+                bubble.style.boxShadow = `
+                    0 0 40px rgba(0, 212, 255, 0.9),
+                    0 0 80px rgba(0, 212, 255, 0.6),
+                    0 0 120px rgba(91, 98, 244, 0.4),
+                    0 0 160px rgba(157, 78, 221, 0.3),
+                    inset -5px -5px 30px rgba(255, 255, 255, 0.8),
+                    inset 5px 5px 30px rgba(0, 212, 255, 0.5)
+                `;
+                bubble.style.filter = 'brightness(1.4) saturate(1.3)';
+            } else {
+                bubble.style.boxShadow = '';
+                bubble.style.filter = '';
+            }
+
+            // Apply transform with scale, rotation, and position
+            bubble.style.transform = `
+                translate(${finalX}px, ${finalY}px)
+                scale(${pulseScale})
+                rotate(${state.rotation}deg)
+            `;
+            bubble.style.opacity = opacity;
+        });
+
+        // Update connection lines
+        updateConnections();
+
+        if (isInHero || Array.from(bubbleStates.values()).some(s => Math.abs(s.offsetX) > 0.5 || Math.abs(s.offsetY) > 0.5)) {
+            rafId = requestAnimationFrame(updateBubbles);
+        } else {
+            rafId = null;
+        }
+    }
+
+    // Initialize
+    initBubbles();
+
+    // Start animation
+    function startAnimation() {
+        if (!rafId) {
+            rafId = requestAnimationFrame(updateBubbles);
+        }
+    }
+
+    // Intersection Observer
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                startAnimation();
+            }
+        });
+    }, { threshold: 0.1 });
+
+    observer.observe(hero);
+
+    hero.addEventListener('mousemove', (e) => {
+        const rect = hero.getBoundingClientRect();
+        mouseX = e.clientX - rect.left;
+        mouseY = e.clientY - rect.top;
+        isInHero = true;
+        startAnimation();
+    });
+
+    hero.addEventListener('mouseenter', () => {
+        isInHero = true;
+        startAnimation();
+    });
+
+    hero.addEventListener('mouseleave', () => {
+        isInHero = false;
+        mouseX = null;
+        mouseY = null;
+        // Clear connection lines
+        while (svgContainer.firstChild) {
+            svgContainer.removeChild(svgContainer.firstChild);
+        }
+    });
+
+    // Initial start
+    startAnimation();
+})();
